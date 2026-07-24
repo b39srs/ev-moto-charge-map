@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { useCallback, useTransition } from 'react'
+import { useCallback, useRef, useTransition } from 'react'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -12,7 +12,8 @@ import {
 } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
 import { THAI_PROVINCES } from '@/lib/constants'
-import { Search } from 'lucide-react'
+import { Search, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import type { ConnectorType } from '@/types/entities'
 
 interface StationFiltersProps {
@@ -24,6 +25,20 @@ export function StationFilters({ connectorTypes }: StationFiltersProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [, startTransition] = useTransition()
+  const searchInputRef = useRef<HTMLInputElement>(null)
+
+  const hasFilters =
+    searchParams.has('search') ||
+    searchParams.has('province') ||
+    searchParams.has('connector') ||
+    searchParams.has('free')
+
+  const clearAll = useCallback(() => {
+    if (searchInputRef.current) searchInputRef.current.value = ''
+    startTransition(() => {
+      router.push(pathname)
+    })
+  }, [router, pathname])
 
   const updateParam = useCallback(
     (key: string, value: string) => {
@@ -46,6 +61,7 @@ export function StationFilters({ connectorTypes }: StationFiltersProps) {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
+          ref={searchInputRef}
           placeholder="ค้นหาสถานีชาร์จ..."
           defaultValue={searchParams.get('search') ?? ''}
           onChange={(e) => {
@@ -55,8 +71,20 @@ export function StationFilters({ connectorTypes }: StationFiltersProps) {
             )
             return () => clearTimeout(timer)
           }}
-          className="pl-10"
+          className="pl-10 pr-10"
         />
+        {searchParams.get('search') && (
+          <button
+            type="button"
+            onClick={() => {
+              if (searchInputRef.current) searchInputRef.current.value = ''
+              updateParam('search', '')
+            }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -118,6 +146,13 @@ export function StationFilters({ connectorTypes }: StationFiltersProps) {
           />
           <span className="text-sm">ฟรีเท่านั้น</span>
         </label>
+
+        {hasFilters && (
+          <Button variant="ghost" size="sm" onClick={clearAll}>
+            <X className="mr-1 h-3.5 w-3.5" />
+            ล้างตัวกรอง
+          </Button>
+        )}
       </div>
     </div>
   )
