@@ -38,6 +38,11 @@ export default async function StationsPage({
       <h1 className="mb-4 text-2xl font-bold">สถานีชาร์จ</h1>
       <p className="mb-6 text-muted-foreground">
         รายการสถานีชาร์จมอเตอร์ไซค์ไฟฟ้าทั่วประเทศไทย
+        {totalCount > 0 && (
+          <span className="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+            {totalCount} สถานี
+          </span>
+        )}
       </p>
 
       <Suspense>
