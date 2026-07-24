@@ -35,14 +35,16 @@ export default async function StationsPage({
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h1 className="mb-4 text-2xl font-bold">สถานีชาร์จ</h1>
-      <p className="mb-6 text-muted-foreground">
-        รายการสถานีชาร์จมอเตอร์ไซค์ไฟฟ้าทั่วประเทศไทย
+      <div className="mb-1 flex items-center gap-3">
+        <h1 className="text-2xl font-bold">สถานีชาร์จ</h1>
         {totalCount > 0 && (
-          <span className="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+          <span className="rounded-full bg-primary px-3 py-1 text-sm font-medium text-primary-foreground">
             {totalCount} สถานี
           </span>
         )}
+      </div>
+      <p className="mb-6 text-muted-foreground">
+        รายการสถานีชาร์จมอเตอร์ไซค์ไฟฟ้าทั่วประเทศไทย
       </p>
 
       <Suspense>
