@@ -1,0 +1,493 @@
+export type Database = {
+  public: {
+    Tables: {
+      profiles: {
+        Row: {
+          id: string
+          email: string | null
+          full_name: string | null
+          avatar_url: string | null
+          role: Database['public']['Enums']['user_role']
+          bio: string | null
+          ev_model_id: string | null
+          reputation_score: number
+          is_verified: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          email?: string | null
+          full_name?: string | null
+          avatar_url?: string | null
+          role?: Database['public']['Enums']['user_role']
+          bio?: string | null
+          ev_model_id?: string | null
+          reputation_score?: number
+          is_verified?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string | null
+          full_name?: string | null
+          avatar_url?: string | null
+          role?: Database['public']['Enums']['user_role']
+          bio?: string | null
+          ev_model_id?: string | null
+          reputation_score?: number
+          is_verified?: boolean
+          updated_at?: string
+        }
+      }
+      vehicle_models: {
+        Row: {
+          id: string
+          brand: string
+          model: string
+          category: Database['public']['Enums']['vehicle_category']
+          year_start: number | null
+          year_end: number | null
+          battery_kwh: number | null
+          connector_type_id: string | null
+          max_charge_kw: number | null
+          range_km: number | null
+          image_url: string | null
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          brand: string
+          model: string
+          category?: Database['public']['Enums']['vehicle_category']
+          year_start?: number | null
+          year_end?: number | null
+          battery_kwh?: number | null
+          connector_type_id?: string | null
+          max_charge_kw?: number | null
+          range_km?: number | null
+          image_url?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          brand?: string
+          model?: string
+          category?: Database['public']['Enums']['vehicle_category']
+          year_start?: number | null
+          year_end?: number | null
+          battery_kwh?: number | null
+          connector_type_id?: string | null
+          max_charge_kw?: number | null
+          range_km?: number | null
+          image_url?: string | null
+          is_active?: boolean
+          updated_at?: string
+        }
+      }
+      charging_locations: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          address: string
+          province: string
+          district: string | null
+          subdistrict: string | null
+          postal_code: string | null
+          location: unknown
+          status: Database['public']['Enums']['location_status']
+          source: Database['public']['Enums']['location_source']
+          is_free: boolean
+          price_description: string | null
+          operating_hours: string | null
+          contact_phone: string | null
+          website_url: string | null
+          added_by: string
+          verified_at: string | null
+          verified_by: string | null
+          avg_rating: number
+          review_count: number
+          photo_count: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          address: string
+          province: string
+          district?: string | null
+          subdistrict?: string | null
+          postal_code?: string | null
+          location: unknown
+          status?: Database['public']['Enums']['location_status']
+          source?: Database['public']['Enums']['location_source']
+          is_free?: boolean
+          price_description?: string | null
+          operating_hours?: string | null
+          contact_phone?: string | null
+          website_url?: string | null
+          added_by: string
+          verified_at?: string | null
+          verified_by?: string | null
+          avg_rating?: number
+          review_count?: number
+          photo_count?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          name?: string
+          description?: string | null
+          address?: string
+          province?: string
+          district?: string | null
+          subdistrict?: string | null
+          postal_code?: string | null
+          location?: unknown
+          status?: Database['public']['Enums']['location_status']
+          source?: Database['public']['Enums']['location_source']
+          is_free?: boolean
+          price_description?: string | null
+          operating_hours?: string | null
+          contact_phone?: string | null
+          website_url?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          avg_rating?: number
+          review_count?: number
+          photo_count?: number
+          updated_at?: string
+        }
+      }
+      connector_types: {
+        Row: {
+          id: string
+          name: string
+          display_name: string
+          description: string | null
+          icon_url: string | null
+          power_type: string
+          is_common_for_motorcycle: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          display_name: string
+          description?: string | null
+          icon_url?: string | null
+          power_type: string
+          is_common_for_motorcycle?: boolean
+          created_at?: string
+        }
+        Update: {
+          name?: string
+          display_name?: string
+          description?: string | null
+          icon_url?: string | null
+          power_type?: string
+          is_common_for_motorcycle?: boolean
+        }
+      }
+      location_connectors: {
+        Row: {
+          id: string
+          location_id: string
+          connector_type_id: string
+          quantity: number
+          power_kw: number | null
+          price_per_kwh: number | null
+          price_per_minute: number | null
+          is_available: boolean
+          notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          location_id: string
+          connector_type_id: string
+          quantity?: number
+          power_kw?: number | null
+          price_per_kwh?: number | null
+          price_per_minute?: number | null
+          is_available?: boolean
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          location_id?: string
+          connector_type_id?: string
+          quantity?: number
+          power_kw?: number | null
+          price_per_kwh?: number | null
+          price_per_minute?: number | null
+          is_available?: boolean
+          notes?: string | null
+          updated_at?: string
+        }
+      }
+      compatibility_reports: {
+        Row: {
+          id: string
+          location_id: string
+          vehicle_model_id: string
+          connector_id: string | null
+          user_id: string
+          status: Database['public']['Enums']['compatibility_status']
+          result: Database['public']['Enums']['charge_result']
+          charge_speed_kw: number | null
+          charge_duration_minutes: number | null
+          notes: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          location_id: string
+          vehicle_model_id: string
+          connector_id?: string | null
+          user_id: string
+          status: Database['public']['Enums']['compatibility_status']
+          result: Database['public']['Enums']['charge_result']
+          charge_speed_kw?: number | null
+          charge_duration_minutes?: number | null
+          notes?: string | null
+          created_at?: string
+        }
+        Update: {
+          location_id?: string
+          vehicle_model_id?: string
+          connector_id?: string | null
+          status?: Database['public']['Enums']['compatibility_status']
+          result?: Database['public']['Enums']['charge_result']
+          charge_speed_kw?: number | null
+          charge_duration_minutes?: number | null
+          notes?: string | null
+        }
+      }
+      reviews: {
+        Row: {
+          id: string
+          location_id: string
+          user_id: string
+          rating: number
+          comment: string | null
+          visit_date: string | null
+          is_edited: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          location_id: string
+          user_id: string
+          rating: number
+          comment?: string | null
+          visit_date?: string | null
+          is_edited?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          rating?: number
+          comment?: string | null
+          visit_date?: string | null
+          is_edited?: boolean
+          updated_at?: string
+        }
+      }
+      photos: {
+        Row: {
+          id: string
+          location_id: string
+          user_id: string
+          storage_path: string
+          url: string
+          caption: string | null
+          category: Database['public']['Enums']['photo_category']
+          is_primary: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          location_id: string
+          user_id: string
+          storage_path: string
+          url: string
+          caption?: string | null
+          category?: Database['public']['Enums']['photo_category']
+          is_primary?: boolean
+          created_at?: string
+        }
+        Update: {
+          storage_path?: string
+          url?: string
+          caption?: string | null
+          category?: Database['public']['Enums']['photo_category']
+          is_primary?: boolean
+        }
+      }
+      amenities: {
+        Row: {
+          id: string
+          name: string
+          display_name: string
+          icon: string
+          category: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          display_name: string
+          icon: string
+          category?: string
+          created_at?: string
+        }
+        Update: {
+          name?: string
+          display_name?: string
+          icon?: string
+          category?: string
+        }
+      }
+      location_amenities: {
+        Row: {
+          location_id: string
+          amenity_id: string
+        }
+        Insert: {
+          location_id: string
+          amenity_id: string
+        }
+        Update: {
+          location_id?: string
+          amenity_id?: string
+        }
+      }
+      favorites: {
+        Row: {
+          id: string
+          user_id: string
+          location_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          location_id: string
+          created_at?: string
+        }
+        Update: {
+          user_id?: string
+          location_id?: string
+        }
+      }
+      verification_logs: {
+        Row: {
+          id: string
+          location_id: string
+          moderator_id: string
+          action: Database['public']['Enums']['verification_action']
+          reason: string | null
+          previous_status: Database['public']['Enums']['location_status'] | null
+          new_status: Database['public']['Enums']['location_status'] | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          location_id: string
+          moderator_id: string
+          action: Database['public']['Enums']['verification_action']
+          reason?: string | null
+          previous_status?: Database['public']['Enums']['location_status'] | null
+          new_status?: Database['public']['Enums']['location_status'] | null
+          created_at?: string
+        }
+        Update: {
+          action?: Database['public']['Enums']['verification_action']
+          reason?: string | null
+          previous_status?: Database['public']['Enums']['location_status'] | null
+          new_status?: Database['public']['Enums']['location_status'] | null
+        }
+      }
+      edit_suggestions: {
+        Row: {
+          id: string
+          location_id: string
+          user_id: string
+          field_name: string
+          current_value: string | null
+          suggested_value: string
+          reason: string | null
+          status: Database['public']['Enums']['suggestion_status']
+          reviewed_by: string | null
+          reviewed_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          location_id: string
+          user_id: string
+          field_name: string
+          current_value?: string | null
+          suggested_value: string
+          reason?: string | null
+          status?: Database['public']['Enums']['suggestion_status']
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          field_name?: string
+          current_value?: string | null
+          suggested_value?: string
+          reason?: string | null
+          status?: Database['public']['Enums']['suggestion_status']
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+        }
+      }
+    }
+    Views: Record<string, never>
+    Functions: {
+      is_admin_or_moderator: {
+        Args: Record<string, never>
+        Returns: boolean
+      }
+    }
+    Enums: {
+      user_role: 'user' | 'moderator' | 'admin'
+      vehicle_category: 'motorcycle' | 'scooter' | 'moped'
+      location_status:
+        | 'active'
+        | 'inactive'
+        | 'under_construction'
+        | 'permanently_closed'
+        | 'pending_verification'
+      location_source: 'community' | 'official' | 'imported'
+      compatibility_status:
+        | 'compatible'
+        | 'incompatible'
+        | 'partial'
+        | 'untested'
+      charge_result: 'success' | 'slow_charge' | 'failed' | 'adapter_needed'
+      photo_category:
+        | 'station'
+        | 'connector'
+        | 'environment'
+        | 'parking'
+        | 'other'
+      verification_action: 'verify' | 'reject' | 'flag' | 'unflag'
+      suggestion_status: 'pending' | 'approved' | 'rejected'
+    }
+  }
+}
