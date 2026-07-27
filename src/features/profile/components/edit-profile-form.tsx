@@ -1,13 +1,20 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { updateProfile } from '@/features/profile/actions/profile-actions'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField } from '@/components/form/form-field'
 import { SubmitButton } from '@/components/form/submit-button'
+import { MotorcycleSelector } from '@/features/motorcycle/components/motorcycle-selector'
 import { toast } from 'sonner'
 import { useEffect, useRef } from 'react'
+
+interface VehicleModelOption {
+  id: string
+  brand: string
+  model: string
+}
 
 interface EditProfileFormProps {
   profile: {
@@ -15,11 +22,15 @@ interface EditProfileFormProps {
     bio: string | null
     ev_model_id: string | null
   }
+  vehicleModels: VehicleModelOption[]
 }
 
-export function EditProfileForm({ profile }: EditProfileFormProps) {
+export function EditProfileForm({ profile, vehicleModels }: EditProfileFormProps) {
   const [state, formAction] = useActionState(updateProfile, null)
   const prevState = useRef(state)
+  const [selectedModelId, setSelectedModelId] = useState(
+    profile.ev_model_id ?? ''
+  )
 
   useEffect(() => {
     if (state && state !== prevState.current) {
@@ -50,6 +61,19 @@ export function EditProfileForm({ profile }: EditProfileFormProps) {
           defaultValue={profile.bio ?? ''}
           placeholder="บอกเล่าเกี่ยวกับตัวคุณ..."
           rows={3}
+        />
+      </FormField>
+
+      <FormField
+        label="มอเตอร์ไซค์ของฉัน"
+        error={state?.errors?.ev_model_id?.[0]}
+      >
+        <input type="hidden" name="ev_model_id" value={selectedModelId} />
+        <MotorcycleSelector
+          models={vehicleModels}
+          value={selectedModelId}
+          onValueChange={setSelectedModelId}
+          className="w-full"
         />
       </FormField>
 

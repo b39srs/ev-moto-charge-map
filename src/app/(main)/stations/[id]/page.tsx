@@ -10,6 +10,12 @@ import {
   getStationCoordinates,
 } from '@/features/stations/actions/queries'
 import { getReviewsByLocation } from '@/features/reviews/actions/queries'
+import { getCompatibilitySummaryByLocation } from '@/features/compatibility/actions/queries'
+import {
+  getUserMotorcycle,
+  getVehicleModels,
+} from '@/features/motorcycle/actions/queries'
+import { CompatibilitySection } from '@/features/compatibility/components/compatibility-section'
 
 export async function generateMetadata({
   params,
@@ -56,10 +62,20 @@ export default async function StationDetailPage({
     data: { user },
   } = await supabase.auth.getUser()
 
-  const [reviews, isFavorited, coordinates] = await Promise.all([
+  const [
+    reviews,
+    isFavorited,
+    coordinates,
+    compatSummaries,
+    userMotorcycle,
+    vehicleModels,
+  ] = await Promise.all([
     getReviewsByLocation(id),
     user ? checkFavorite(user.id, id) : false,
     getStationCoordinates(id),
+    getCompatibilitySummaryByLocation(id),
+    user ? getUserMotorcycle(user.id) : null,
+    getVehicleModels(),
   ])
 
   const hasReviewed = user
@@ -92,6 +108,14 @@ export default async function StationDetailPage({
           <PhotoGallery photos={(station as any).photos ?? []} />
 
           <StationInfo station={station} />
+
+          <CompatibilitySection
+            locationId={id}
+            summaries={compatSummaries}
+            currentUserId={user?.id}
+            userMotorcycleId={userMotorcycle?.id}
+            vehicleModels={vehicleModels}
+          />
 
           <ReviewsSection
             locationId={id}

@@ -3,9 +3,20 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Zap, MapPin, Users, Star } from 'lucide-react'
 import { getHomeStats } from '@/features/stations/actions/queries'
+import { getVehicleModels } from '@/features/motorcycle/actions/queries'
+import { MotorcyclePromptCard } from '@/features/motorcycle/components/motorcycle-prompt-card'
+import { createClient } from '@/lib/supabase/server'
 
 export default async function HomePage() {
-  const stats = await getHomeStats()
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const [stats, vehicleModels] = await Promise.all([
+    getHomeStats(),
+    getVehicleModels(),
+  ])
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -21,6 +32,7 @@ export default async function HomePage() {
           ค้นหาจุดชาร์จมอเตอร์ไซค์ไฟฟ้าทั่วประเทศไทย
           แชร์ประสบการณ์และรีวิวสถานีชาร์จ โดยชุมชนผู้ใช้ EV
         </p>
+        <MotorcyclePromptCard models={vehicleModels} isLoggedIn={!!user} />
         <div className="flex gap-3">
           <Button size="lg" nativeButton={false} render={<Link href="/map" />}>
             ดูแผนที่

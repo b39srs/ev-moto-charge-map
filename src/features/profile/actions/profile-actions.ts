@@ -48,6 +48,6 @@ export async function updateProfile(
     return { success: false, message: 'เกิดข้อผิดพลาดในการอัปเดตโปรไฟล์' }
   }
 
-  revalidatePath('/profile')
+  revalidatePath('/', 'layout')
   return { success: true, message: 'อัปเดตโปรไฟล์สำเร็จ' }
 }

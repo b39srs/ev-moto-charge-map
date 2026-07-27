@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { signOut } from '@/features/auth/actions/auth-actions'
-import { Heart, LogOut, User } from 'lucide-react'
+import { Bike, Heart, LogOut, User } from 'lucide-react'
 import Link from 'next/link'
 
 interface UserMenuProps {
@@ -47,6 +47,10 @@ export function UserMenu({ user }: UserMenuProps) {
         <DropdownMenuItem render={<Link href="/profile" />} className="cursor-pointer">
           <User className="mr-2 h-4 w-4" />
           โปรไฟล์
+        </DropdownMenuItem>
+        <DropdownMenuItem render={<Link href="/profile" />} className="cursor-pointer">
+          <Bike className="mr-2 h-4 w-4" />
+          มอเตอร์ไซค์ของฉัน
         </DropdownMenuItem>
         <DropdownMenuItem render={<Link href="/profile/favorites" />} className="cursor-pointer">
           <Heart className="mr-2 h-4 w-4" />

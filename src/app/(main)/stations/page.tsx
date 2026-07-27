@@ -12,6 +12,7 @@ import {
 import { StationCard } from '@/features/stations/components/station-card'
 import { StationFilters } from '@/features/stations/components/station-filters'
 import { Pagination } from '@/features/stations/components/pagination'
+import { MyMotorcycleBadge } from '@/features/motorcycle/components/my-motorcycle-badge'
 import { MapPin } from 'lucide-react'
 
 export default async function StationsPage({
@@ -46,6 +47,8 @@ export default async function StationsPage({
       <p className="mb-6 text-muted-foreground">
         รายการสถานีชาร์จมอเตอร์ไซค์ไฟฟ้าทั่วประเทศไทย
       </p>
+
+      <MyMotorcycleBadge />
 
       <Suspense>
         <StationFilters connectorTypes={connectorTypes} />

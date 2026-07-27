@@ -21,6 +21,10 @@ export type LocationConnectorInsert = Tables['location_connectors']['Insert']
 export type CompatibilityReport = Tables['compatibility_reports']['Row']
 export type CompatibilityReportInsert = Tables['compatibility_reports']['Insert']
 
+export type CompatibilitySummary = Tables['compatibility_summaries']['Row']
+export type CompatibilitySummaryInsert = Tables['compatibility_summaries']['Insert']
+export type CompatibilitySummaryUpdate = Tables['compatibility_summaries']['Update']
+
 export type Review = Tables['reviews']['Row']
 export type ReviewInsert = Tables['reviews']['Insert']
 export type ReviewUpdate = Tables['reviews']['Update']

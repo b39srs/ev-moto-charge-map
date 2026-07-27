@@ -14,6 +14,7 @@ import { UserStations } from '@/features/profile/components/user-stations'
 import { UserReviews } from '@/features/profile/components/user-reviews'
 import { getUserStations } from '@/features/stations/actions/queries'
 import { getUserReviews } from '@/features/reviews/actions/queries'
+import { getVehicleModels } from '@/features/motorcycle/actions/queries'
 import type { Profile } from '@/types/entities'
 
 export default async function ProfilePage() {
@@ -33,9 +34,10 @@ export default async function ProfilePage() {
     .single()
   const profile = data as Profile | null
 
-  const [stations, reviews] = await Promise.all([
+  const [stations, reviews, vehicleModels] = await Promise.all([
     getUserStations(user.id),
     getUserReviews(user.id),
+    getVehicleModels(),
   ])
 
   return (
@@ -93,6 +95,7 @@ export default async function ProfilePage() {
                   bio: profile?.bio ?? null,
                   ev_model_id: profile?.ev_model_id ?? null,
                 }}
+                vehicleModels={vehicleModels}
               />
             </CardContent>
           </Card>

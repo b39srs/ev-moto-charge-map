@@ -40,6 +40,7 @@ export type Database = {
           is_verified?: boolean
           updated_at?: string
         }
+        Relationships: []
       }
       vehicle_models: {
         Row: {
@@ -88,6 +89,7 @@ export type Database = {
           is_active?: boolean
           updated_at?: string
         }
+        Relationships: []
       }
       charging_locations: {
         Row: {
@@ -165,6 +167,7 @@ export type Database = {
           photo_count?: number
           updated_at?: string
         }
+        Relationships: []
       }
       connector_types: {
         Row: {
@@ -195,6 +198,7 @@ export type Database = {
           power_type?: string
           is_common_for_motorcycle?: boolean
         }
+        Relationships: []
       }
       location_connectors: {
         Row: {
@@ -234,44 +238,89 @@ export type Database = {
           notes?: string | null
           updated_at?: string
         }
+        Relationships: []
       }
       compatibility_reports: {
         Row: {
           id: string
+          user_id: string
           location_id: string
           vehicle_model_id: string
           connector_id: string | null
-          user_id: string
-          status: Database['public']['Enums']['compatibility_status']
-          result: Database['public']['Enums']['charge_result']
-          charge_speed_kw: number | null
-          charge_duration_minutes: number | null
+          outcome: Database['public']['Enums']['report_outcome']
+          reason: Database['public']['Enums']['report_reason'] | null
+          charging_speed_kw: number | null
+          charge_duration_min: number | null
+          battery_before_pct: number | null
+          battery_after_pct: number | null
+          adapter_used: boolean
           notes: string | null
           created_at: string
         }
         Insert: {
           id?: string
+          user_id: string
           location_id: string
           vehicle_model_id: string
           connector_id?: string | null
-          user_id: string
-          status: Database['public']['Enums']['compatibility_status']
-          result: Database['public']['Enums']['charge_result']
-          charge_speed_kw?: number | null
-          charge_duration_minutes?: number | null
+          outcome: Database['public']['Enums']['report_outcome']
+          reason?: Database['public']['Enums']['report_reason'] | null
+          charging_speed_kw?: number | null
+          charge_duration_min?: number | null
+          battery_before_pct?: number | null
+          battery_after_pct?: number | null
+          adapter_used?: boolean
           notes?: string | null
           created_at?: string
         }
         Update: {
-          location_id?: string
-          vehicle_model_id?: string
-          connector_id?: string | null
-          status?: Database['public']['Enums']['compatibility_status']
-          result?: Database['public']['Enums']['charge_result']
-          charge_speed_kw?: number | null
-          charge_duration_minutes?: number | null
+          outcome?: Database['public']['Enums']['report_outcome']
+          reason?: Database['public']['Enums']['report_reason'] | null
+          charging_speed_kw?: number | null
+          charge_duration_min?: number | null
+          battery_before_pct?: number | null
+          battery_after_pct?: number | null
+          adapter_used?: boolean
           notes?: string | null
         }
+        Relationships: []
+      }
+      compatibility_summaries: {
+        Row: {
+          vehicle_model_id: string
+          location_id: string
+          total_reports: number
+          success_count: number
+          failed_count: number
+          unique_reporters: number
+          verification_level: number
+          last_report_at: string | null
+          last_success_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          vehicle_model_id: string
+          location_id: string
+          total_reports?: number
+          success_count?: number
+          failed_count?: number
+          unique_reporters?: number
+          verification_level?: number
+          last_report_at?: string | null
+          last_success_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          total_reports?: number
+          success_count?: number
+          failed_count?: number
+          unique_reporters?: number
+          verification_level?: number
+          last_report_at?: string | null
+          last_success_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       reviews: {
         Row: {
@@ -303,6 +352,7 @@ export type Database = {
           is_edited?: boolean
           updated_at?: string
         }
+        Relationships: []
       }
       photos: {
         Row: {
@@ -334,6 +384,7 @@ export type Database = {
           category?: Database['public']['Enums']['photo_category']
           is_primary?: boolean
         }
+        Relationships: []
       }
       amenities: {
         Row: {
@@ -358,6 +409,7 @@ export type Database = {
           icon?: string
           category?: string
         }
+        Relationships: []
       }
       location_amenities: {
         Row: {
@@ -372,6 +424,7 @@ export type Database = {
           location_id?: string
           amenity_id?: string
         }
+        Relationships: []
       }
       favorites: {
         Row: {
@@ -390,6 +443,7 @@ export type Database = {
           user_id?: string
           location_id?: string
         }
+        Relationships: []
       }
       verification_logs: {
         Row: {
@@ -418,6 +472,7 @@ export type Database = {
           previous_status?: Database['public']['Enums']['location_status'] | null
           new_status?: Database['public']['Enums']['location_status'] | null
         }
+        Relationships: []
       }
       edit_suggestions: {
         Row: {
@@ -455,6 +510,7 @@ export type Database = {
           reviewed_by?: string | null
           reviewed_at?: string | null
         }
+        Relationships: []
       }
     }
     Views: Record<string, never>
@@ -474,12 +530,14 @@ export type Database = {
         | 'permanently_closed'
         | 'pending_verification'
       location_source: 'community' | 'official' | 'imported'
-      compatibility_status:
-        | 'compatible'
-        | 'incompatible'
-        | 'partial'
-        | 'untested'
-      charge_result: 'success' | 'slow_charge' | 'failed' | 'adapter_needed'
+      report_outcome: 'success' | 'failed'
+      report_reason:
+        | 'incompatible_connector'
+        | 'station_offline'
+        | 'power_limit'
+        | 'adapter_required'
+        | 'unknown'
+        | 'other'
       photo_category:
         | 'station'
         | 'connector'
