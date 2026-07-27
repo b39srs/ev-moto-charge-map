@@ -32,23 +32,9 @@ export function MotorcycleAutocomplete({
     [models, value]
   )
 
-  // Group models by brand for visual grouping
-  const grouped = useMemo(() => {
-    const map = new Map<string, VehicleModelOption[]>()
-    for (const m of models) {
-      const group = map.get(m.brand) ?? []
-      group.push(m)
-      map.set(m.brand, group)
-    }
-    return Array.from(map.entries()).map(([brand, items]) => ({
-      brand,
-      items,
-    }))
-  }, [models])
-
   return (
     <Combobox.Root
-      items={grouped}
+      items={models}
       value={selectedModel}
       onValueChange={(model) => onValueChange?.(model?.id ?? '')}
       itemToStringLabel={(m) => getModelDisplayName(m.brand, m.model)}
@@ -76,27 +62,19 @@ export function MotorcycleAutocomplete({
         <Combobox.Positioner sideOffset={4} className="z-50">
           <Combobox.Popup className="max-h-60 w-[var(--anchor-width)] overflow-y-auto rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10">
             <Combobox.List className="p-1">
-              {grouped.map((group) => (
-                <Combobox.Group key={group.brand}>
-                  <Combobox.GroupLabel className="px-1.5 py-1 text-xs text-muted-foreground">
-                    {group.brand}
-                  </Combobox.GroupLabel>
-                  {group.items.map((item) => (
-                    <Combobox.Item
-                      key={item.id}
-                      value={item}
-                      className="relative flex w-full cursor-default items-center rounded-md py-1.5 pr-8 pl-3 text-sm outline-hidden select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground"
-                    >
-                      {item.brand === item.model
-                        ? item.model
-                        : item.model}
-                      <Combobox.ItemIndicator className="absolute right-2">
-                        <CheckIcon className="h-4 w-4" />
-                      </Combobox.ItemIndicator>
-                    </Combobox.Item>
-                  ))}
-                </Combobox.Group>
-              ))}
+              <Combobox.Collection>
+                {(item) => (
+                  <Combobox.Item
+                    value={item}
+                    className="relative flex w-full cursor-default items-center rounded-md py-1.5 pr-8 pl-2.5 text-sm outline-hidden select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground"
+                  >
+                    {getModelDisplayName(item.brand, item.model)}
+                    <Combobox.ItemIndicator className="absolute right-2">
+                      <CheckIcon className="h-4 w-4" />
+                    </Combobox.ItemIndicator>
+                  </Combobox.Item>
+                )}
+              </Combobox.Collection>
               <Combobox.Empty className="py-4 text-center text-sm text-muted-foreground">
                 ไม่พบรุ่นที่ค้นหา
               </Combobox.Empty>
