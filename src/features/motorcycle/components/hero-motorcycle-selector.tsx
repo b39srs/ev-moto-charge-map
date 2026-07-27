@@ -50,7 +50,7 @@ export function HeroMotorcycleSelector({
           className="flex items-center justify-center gap-2 rounded-lg border bg-primary/5 px-4 py-3 text-sm font-medium transition-colors hover:bg-primary/10"
         >
           <Bike className="h-4 w-4 text-primary" />
-          <span>ดูสถานีที่รองรับ {motorcycle.displayName} →</span>
+          <span>ค้นหาสถานีชาร์จสำหรับ {motorcycle.displayName} →</span>
         </Link>
       )}
 

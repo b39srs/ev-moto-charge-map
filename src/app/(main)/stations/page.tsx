@@ -32,11 +32,11 @@ export async function generateMetadata({
     if (vehicle) {
       const displayName = getModelDisplayName(vehicle.brand, vehicle.model)
       return {
-        title: `สถานีชาร์จที่รองรับ ${displayName}`,
-        description: `ค้นหาสถานีชาร์จมอเตอร์ไซค์ไฟฟ้าที่รองรับ ${displayName} ทั่วประเทศไทย`,
+        title: `สถานีชาร์จสำหรับ ${displayName}`,
+        description: `ค้นหาสถานีชาร์จที่คาดว่าใช้งานได้กับ ${displayName} ทั่วประเทศไทย อ้างอิงจากข้อมูลหัวชาร์จ`,
         openGraph: {
-          title: `${displayName} Charging Stations Thailand`,
-          description: `Find charging stations compatible with ${displayName} in Thailand.`,
+          title: `${displayName} — Compatible Charging Stations`,
+          description: `Find charging stations expected to work with ${displayName} in Thailand, based on connector compatibility.`,
         },
       }
     }
@@ -97,6 +97,16 @@ export default async function StationsPage({
         )
       : null
 
+  // Count verified stations (community confirmed)
+  let verifiedCount = 0
+  if (summaryMap) {
+    for (const info of summaryMap.values()) {
+      if (info.verificationLevel >= 2 && info.verificationLevel <= 3) {
+        verifiedCount++
+      }
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="mb-1 flex items-center gap-3">
@@ -109,7 +119,7 @@ export default async function StationsPage({
       </div>
       <p className="mb-6 text-muted-foreground">
         {vehicleDisplayName
-          ? `สถานีชาร์จที่รองรับ ${vehicleDisplayName}`
+          ? `สถานีที่คาดว่าใช้งานได้กับ ${vehicleDisplayName}`
           : 'รายการสถานีชาร์จมอเตอร์ไซค์ไฟฟ้าทั่วประเทศไทย'}
       </p>
 
@@ -118,6 +128,7 @@ export default async function StationsPage({
         <VehicleSummaryCard
           displayName={vehicleDisplayName}
           compatibleCount={totalCount}
+          verifiedCount={verifiedCount}
         />
       )}
 
@@ -152,7 +163,7 @@ export default async function StationsPage({
         <div className="flex flex-col items-center gap-3 py-16 text-center">
           <MapPin className="h-12 w-12 text-muted-foreground/40" />
           <p className="text-lg font-medium">
-            ยังไม่พบจุดชาร์จที่รองรับรถรุ่นนี้
+            ยังไม่พบสถานีที่มีหัวชาร์จตรงกับรถรุ่นนี้
           </p>
           <p className="text-muted-foreground">
             ช่วยชุมชน! รายงานจุดชาร์จที่คุณเคยใช้งานได้

@@ -90,12 +90,21 @@ export function StationCard({ station, vehicleDisplayName, compatibility }: Stat
             </div>
 
             {vehicleDisplayName ? (
-              <CompatibilityBadge
-                vehicleDisplayName={vehicleDisplayName}
-                verificationLevel={compatibility?.verificationLevel}
-                totalReports={compatibility?.totalReports}
-                successCount={compatibility?.successCount}
-              />
+              <div>
+                <CompatibilityBadge
+                  vehicleDisplayName={vehicleDisplayName}
+                  verificationLevel={compatibility?.verificationLevel}
+                  totalReports={compatibility?.totalReports}
+                  successCount={compatibility?.successCount}
+                />
+                {/* CTA: encourage verification for unverified stations */}
+                {(compatibility?.verificationLevel == null ||
+                  compatibility.verificationLevel === 0) && (
+                  <p className="mt-1 pl-3.5 text-xs text-primary/80">
+                    ช่วยยืนยัน — รายงานผลการใช้งาน
+                  </p>
+                )}
+              </div>
             ) : (
               connectorNames && connectorNames.length > 0 && (
                 <div className="flex flex-wrap gap-1">
