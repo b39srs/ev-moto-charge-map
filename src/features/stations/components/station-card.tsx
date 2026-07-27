@@ -7,6 +7,8 @@ import {
   LOCATION_STATUS_LABELS,
   LOCATION_STATUS_COLORS,
 } from '@/lib/constants'
+import { CompatibilityBadge } from '@/features/compatibility/components/compatibility-badge'
+import type { StationCompatibilityInfo } from '@/features/stations/actions/queries'
 
 interface StationCardProps {
   station: {
@@ -23,9 +25,11 @@ interface StationCardProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     photos?: any[]
   }
+  vehicleDisplayName?: string
+  compatibility?: StationCompatibilityInfo | null
 }
 
-export function StationCard({ station }: StationCardProps) {
+export function StationCard({ station, vehicleDisplayName, compatibility }: StationCardProps) {
   const primaryPhoto = station.photos?.find(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (p: any) => p.is_primary
@@ -85,14 +89,23 @@ export function StationCard({ station }: StationCardProps) {
               )}
             </div>
 
-            {connectorNames && connectorNames.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {connectorNames.map((name: string) => (
-                  <Badge key={name} variant="outline" className="text-xs">
-                    {name}
-                  </Badge>
-                ))}
-              </div>
+            {vehicleDisplayName ? (
+              <CompatibilityBadge
+                vehicleDisplayName={vehicleDisplayName}
+                verificationLevel={compatibility?.verificationLevel}
+                totalReports={compatibility?.totalReports}
+                successCount={compatibility?.successCount}
+              />
+            ) : (
+              connectorNames && connectorNames.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {connectorNames.map((name: string) => (
+                    <Badge key={name} variant="outline" className="text-xs">
+                      {name}
+                    </Badge>
+                  ))}
+                </div>
+              )
             )}
           </div>
         </CardContent>

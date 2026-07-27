@@ -14,13 +14,27 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { THAI_PROVINCES } from '@/lib/constants'
 import { Search, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { MotorcycleAutocomplete } from '@/features/motorcycle/components/motorcycle-autocomplete'
+import { getModelDisplayName } from '@/features/motorcycle/lib/utils'
 import type { ConnectorType } from '@/types/entities'
+
+interface VehicleModelOption {
+  id: string
+  brand: string
+  model: string
+}
 
 interface StationFiltersProps {
   connectorTypes: ConnectorType[]
+  vehicleModels?: VehicleModelOption[]
+  activeVehicleId?: string
 }
 
-export function StationFilters({ connectorTypes }: StationFiltersProps) {
+export function StationFilters({
+  connectorTypes,
+  vehicleModels,
+  activeVehicleId,
+}: StationFiltersProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -31,7 +45,8 @@ export function StationFilters({ connectorTypes }: StationFiltersProps) {
     searchParams.has('search') ||
     searchParams.has('province') ||
     searchParams.has('connector') ||
-    searchParams.has('free')
+    searchParams.has('free') ||
+    searchParams.has('vehicle')
 
   const clearAll = useCallback(() => {
     if (searchInputRef.current) searchInputRef.current.value = ''
@@ -48,6 +63,10 @@ export function StationFilters({ connectorTypes }: StationFiltersProps) {
       } else {
         params.delete(key)
       }
+      // Vehicle and connector are mutually exclusive
+      if (key === 'vehicle' && value) {
+        params.delete('connector')
+      }
       params.delete('page') // Reset to page 1 on filter change
       startTransition(() => {
         router.push(`${pathname}?${params.toString()}`)
@@ -56,8 +75,28 @@ export function StationFilters({ connectorTypes }: StationFiltersProps) {
     [searchParams, router, pathname]
   )
 
+  const handleVehicleChange = useCallback(
+    (modelId: string) => {
+      updateParam('vehicle', modelId)
+    },
+    [updateParam]
+  )
+
   return (
     <div className="mb-6 space-y-3">
+      {/* Vehicle selector */}
+      {vehicleModels && vehicleModels.length > 0 && (
+        <div className="flex items-center gap-2">
+          <MotorcycleAutocomplete
+            models={vehicleModels}
+            value={activeVehicleId}
+            onValueChange={handleVehicleChange}
+            placeholder="ค้นหารุ่นมอเตอร์ไซค์..."
+            className="max-w-sm"
+          />
+        </div>
+      )}
+
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -90,7 +129,9 @@ export function StationFilters({ connectorTypes }: StationFiltersProps) {
       <div className="flex flex-wrap gap-3">
         <Select
           value={searchParams.get('province') ?? ''}
-          onValueChange={(v) => updateParam('province', v === 'all' ? '' : v ?? '')}
+          onValueChange={(v) =>
+            updateParam('province', v === 'all' ? '' : v ?? '')
+          }
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="จังหวัด" />
@@ -105,24 +146,27 @@ export function StationFilters({ connectorTypes }: StationFiltersProps) {
           </SelectContent>
         </Select>
 
-        <Select
-          value={searchParams.get('connector') ?? ''}
-          onValueChange={(v) =>
-            updateParam('connector', v === 'all' ? '' : v ?? '')
-          }
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="หัวชาร์จ" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">ทุกประเภท</SelectItem>
-            {connectorTypes.map((ct) => (
-              <SelectItem key={ct.id} value={ct.id}>
-                {ct.display_name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {/* Hide connector filter when vehicle is active (vehicle supersedes connector) */}
+        {!activeVehicleId && (
+          <Select
+            value={searchParams.get('connector') ?? ''}
+            onValueChange={(v) =>
+              updateParam('connector', v === 'all' ? '' : v ?? '')
+            }
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="หัวชาร์จ" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">ทุกประเภท</SelectItem>
+              {connectorTypes.map((ct) => (
+                <SelectItem key={ct.id} value={ct.id}>
+                  {ct.display_name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
 
         <Select
           value={searchParams.get('sort') ?? 'newest'}

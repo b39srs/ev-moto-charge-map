@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { ITEMS_PER_PAGE } from '@/lib/constants'
 import type { ConnectorType, Amenity, ChargingLocation } from '@/types/entities'
 import type { StationMapPin } from '@/types/map'
+import type { VerificationLevel } from '@/features/compatibility/types'
 
 export async function getConnectorTypes(): Promise<ConnectorType[]> {
   const supabase = await createClient()
@@ -216,4 +217,110 @@ export async function checkFavorite(userId: string, locationId: string) {
     .eq('location_id', locationId)
     .maybeSingle()
   return !!data
+}
+
+// --- Compatible stations (vehicle filter) ---
+
+export async function getCompatibleStations(params: {
+  connectorTypeId: string
+  search?: string
+  province?: string
+  isFree?: boolean
+  sort?: 'newest' | 'rating'
+  page?: number
+}): Promise<{ stations: StationListItem[]; totalCount: number }> {
+  const supabase = await createClient()
+  const page = params.page ?? 1
+  const from = (page - 1) * ITEMS_PER_PAGE
+  const to = from + ITEMS_PER_PAGE - 1
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let query = (supabase.from('charging_locations') as any).select(
+    `
+    *,
+    location_connectors!inner(connector_type_id, connector_types(display_name)),
+    photos(url, is_primary)
+  `,
+    { count: 'exact' }
+  )
+
+  // !inner join + eq filters to only stations with matching connector
+  query = query.eq('location_connectors.connector_type_id', params.connectorTypeId)
+
+  if (params.search) {
+    query = query.ilike('name', `%${params.search}%`)
+  }
+
+  if (params.province) {
+    query = query.eq('province', params.province)
+  }
+
+  if (params.isFree) {
+    query = query.eq('is_free', true)
+  }
+
+  if (params.sort === 'rating') {
+    query = query.order('avg_rating', { ascending: false })
+  } else {
+    query = query.order('created_at', { ascending: false })
+  }
+
+  query = query.range(from, to)
+
+  const { data, count, error } = await query
+
+  if (error) {
+    console.error('Error fetching compatible stations:', error)
+    return { stations: [], totalCount: 0 }
+  }
+
+  return {
+    stations: (data ?? []) as unknown as StationListItem[],
+    totalCount: count ?? 0,
+  }
+}
+
+export interface StationCompatibilityInfo {
+  verificationLevel: VerificationLevel
+  totalReports: number
+  successCount: number
+}
+
+export async function getCompatibilitySummariesBatch(
+  vehicleModelId: string,
+  stationIds: string[]
+): Promise<Map<string, StationCompatibilityInfo>> {
+  const map = new Map<string, StationCompatibilityInfo>()
+  if (stationIds.length === 0) return map
+
+  const supabase = await createClient()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (supabase.from('compatibility_summaries') as any)
+    .select('location_id, verification_level, total_reports, success_count')
+    .eq('vehicle_model_id', vehicleModelId)
+    .in('location_id', stationIds)
+
+  for (const row of data ?? []) {
+    map.set(row.location_id, {
+      verificationLevel: row.verification_level as VerificationLevel,
+      totalReports: row.total_reports,
+      successCount: row.success_count,
+    })
+  }
+
+  return map
+}
+
+export async function getCompatibleLocationIds(
+  connectorTypeId: string
+): Promise<string[]> {
+  const supabase = await createClient()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (supabase.from('location_connectors') as any)
+    .select('location_id')
+    .eq('connector_type_id', connectorTypeId)
+
+  if (!data) return []
+  const ids = (data as { location_id: string }[]).map((d) => d.location_id)
+  return [...new Set(ids)]
 }
