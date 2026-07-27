@@ -13,7 +13,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox'
 import { FormField } from '@/components/form/form-field'
 import { SubmitButton } from '@/components/form/submit-button'
-import { MotorcycleSelector } from '@/features/motorcycle/components/motorcycle-selector'
+import { MotorcycleAutocomplete } from '@/features/motorcycle/components/motorcycle-autocomplete'
 import { OutcomeSelector } from './outcome-selector'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -69,7 +69,7 @@ export function ReportForm({
         required
         error={state?.errors?.vehicle_model_id?.[0]}
       >
-        <MotorcycleSelector
+        <MotorcycleAutocomplete
           models={vehicleModels}
           value={modelId}
           onValueChange={setModelId}

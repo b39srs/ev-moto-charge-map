@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField } from '@/components/form/form-field'
 import { SubmitButton } from '@/components/form/submit-button'
-import { MotorcycleSelector } from '@/features/motorcycle/components/motorcycle-selector'
+import { MotorcycleAutocomplete } from '@/features/motorcycle/components/motorcycle-autocomplete'
 import { toast } from 'sonner'
 import { useEffect, useRef } from 'react'
 
@@ -69,7 +69,7 @@ export function EditProfileForm({ profile, vehicleModels }: EditProfileFormProps
         error={state?.errors?.ev_model_id?.[0]}
       >
         <input type="hidden" name="ev_model_id" value={selectedModelId} />
-        <MotorcycleSelector
+        <MotorcycleAutocomplete
           models={vehicleModels}
           value={selectedModelId}
           onValueChange={setSelectedModelId}
