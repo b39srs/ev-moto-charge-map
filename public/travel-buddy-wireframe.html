@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Buddy — Wireframe & UI Mockup v1.0</title>
+<style>
+:root{--p:#2563eb;--p-dark:#1e40af;--p-light:#dbeafe;--p-bg:#eff6ff;--accent:#f59e0b;--accent-light:#fef3c7;--ok:#10b981;--ok-light:#d1fae5;--err:#ef4444;--err-light:#fee2e2;--g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g400:#9ca3af;--g500:#6b7280;--g700:#374151;--g900:#111827;--r:12px;--phone-w:375px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--g900);background:var(--g50);line-height:1.7;font-size:15px}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 40%,#2563eb 70%,#0ea5e9 100%);color:#fff;padding:72px 24px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero .doc-type{display:inline-block;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);padding:6px 20px;border-radius:999px;font-size:.8rem;margin-bottom:20px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
+.hero h1{font-size:3rem;font-weight:900;margin-bottom:8px;letter-spacing:-.5px}
+.hero .subtitle{font-size:1.2rem;opacity:.9;margin-bottom:12px}
+.hero .tagline{font-size:1rem;font-style:italic;opacity:.65;margin-bottom:28px}
+.hero-meta{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;font-size:.85rem;opacity:.8}
+.hero-stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.hero-stat{background:rgba(255,255,255,.1);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);border-radius:var(--r);padding:12px 24px;text-align:center}
+.hero-stat .val{font-size:1.4rem;font-weight:800}
+.hero-stat .lbl{font-size:.75rem;opacity:.7;margin-top:2px}
+
+/* Layout */
+.mx{max-width:1200px;margin:0 auto;padding:0 20px}
+
+/* TOC */
+.toc{background:#fff;border:1px solid var(--g200);border-radius:var(--r);padding:28px 32px;margin:-36px auto 44px;position:relative;z-index:2;box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.toc h2{font-size:.8rem;text-transform:uppercase;letter-spacing:2px;color:var(--g500);margin-bottom:16px;font-weight:700}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 32px}
+.toc a{color:var(--p);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:8px;padding:4px 0}
+.toc a:hover{text-decoration:underline}
+.toc .num{background:var(--p-light);color:var(--p);width:24px;height:24px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0}
+
+/* Section */
+section{margin-bottom:56px}
+.sh{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:14px;border-bottom:3px solid var(--p-light)}
+.sn{background:linear-gradient(135deg,var(--p-dark),var(--p));color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;flex-shrink:0}
+.sh h2{font-size:1.45rem;font-weight:800}
+p{margin-bottom:12px;color:var(--g700)}
+
+/* Wireframe Phone Frame */
+.screen-row{display:flex;flex-wrap:wrap;gap:32px;justify-content:center;margin:24px 0}
+.phone{width:var(--phone-w);background:#fff;border-radius:32px;border:3px solid var(--g300);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.1);flex-shrink:0}
+.phone-status{background:var(--g900);color:#fff;padding:8px 24px 4px;display:flex;justify-content:space-between;font-size:.7rem;font-weight:600}
+.phone-screen{min-height:640px;position:relative;overflow:hidden}
+.phone-label{text-align:center;font-size:.85rem;font-weight:700;color:var(--g700);margin-top:12px}
+.phone-desc{text-align:center;font-size:.8rem;color:var(--g500);margin-top:4px;max-width:var(--phone-w)}
+
+/* Wireframe UI Components */
+.w-header{background:var(--p);color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:1rem}
+.w-header .back{width:24px;height:24px;border:2px solid rgba(255,255,255,.6);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;cursor:pointer}
+.w-header .spacer{flex:1}
+.w-header .icon{width:28px;height:28px;border:2px solid rgba(255,255,255,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem}
+
+.w-search{margin:12px 16px;padding:12px 16px;background:var(--g100);border-radius:10px;display:flex;align-items:center;gap:8px;color:var(--g400);font-size:.9rem}
+
+.w-btn{display:block;margin:12px 16px;padding:14px;border-radius:10px;text-align:center;font-weight:700;font-size:.95rem;cursor:pointer}
+.w-btn-primary{background:var(--p);color:#fff}
+.w-btn-outline{background:#fff;color:var(--p);border:2px solid var(--p)}
+.w-btn-google{background:#fff;border:2px solid var(--g200);color:var(--g700);display:flex;align-items:center;justify-content:center;gap:8px}
+.w-btn-sm{display:inline-block;padding:8px 16px;border-radius:8px;font-size:.8rem;font-weight:600}
+.w-btn-danger{background:var(--err);color:#fff}
+
+.w-input{margin:8px 16px;padding:14px 16px;border:2px solid var(--g200);border-radius:10px;font-size:.9rem;color:var(--g400)}
+.w-input-label{margin:16px 16px 4px;font-size:.8rem;font-weight:600;color:var(--g700)}
+
+.w-divider{display:flex;align-items:center;margin:16px;gap:8px;color:var(--g400);font-size:.8rem}
+.w-divider::before,.w-divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+
+.w-card{margin:8px 16px;padding:16px;background:#fff;border:1px solid var(--g200);border-radius:var(--r);box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.w-card-img{height:120px;background:var(--g100);border-radius:8px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;color:var(--g400);font-size:2rem}
+.w-card-img-sm{height:80px}
+
+.w-avatar{width:48px;height:48px;border-radius:50%;background:var(--g200);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.w-avatar-sm{width:32px;height:32px;font-size:.8rem}
+.w-avatar-lg{width:72px;height:72px;font-size:1.8rem}
+.w-avatar-xl{width:96px;height:96px;font-size:2.5rem}
+
+.w-row{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.w-row-between{justify-content:space-between}
+
+.w-tag{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.75rem;font-weight:600;margin:2px}
+.w-tag-blue{background:var(--p-light);color:var(--p)}
+.w-tag-green{background:var(--ok-light);color:#065f46}
+.w-tag-yellow{background:var(--accent-light);color:#92400e}
+.w-tag-gray{background:var(--g100);color:var(--g700)}
+
+.w-tabs{display:flex;border-bottom:2px solid var(--g200)}
+.w-tab{flex:1;text-align:center;padding:12px;font-size:.85rem;font-weight:600;color:var(--g400)}
+.w-tab.active{color:var(--p);border-bottom:2px solid var(--p);margin-bottom:-2px}
+
+.w-bottom-nav{display:flex;background:#fff;border-top:1px solid var(--g200);position:absolute;bottom:0;left:0;right:0}
+.w-nav-item{flex:1;text-align:center;padding:8px 0 12px;font-size:.65rem;color:var(--g400)}
+.w-nav-item.active{color:var(--p)}
+.w-nav-item .nav-icon{font-size:1.2rem;display:block;margin-bottom:2px}
+.w-nav-item .nav-dot{width:6px;height:6px;background:var(--err);border-radius:50%;display:inline-block;position:relative;top:-8px;left:4px}
+
+.w-badge{display:inline-block;background:var(--err);color:#fff;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:999px;margin-left:4px}
+
+.w-stars{color:var(--accent);font-size:1rem;letter-spacing:2px}
+.w-stars-lg{font-size:1.5rem;letter-spacing:4px}
+
+.w-placeholder{height:40px;background:var(--g100);border-radius:8px;margin:8px 16px}
+
+.w-chip-row{display:flex;gap:6px;padding:0 16px;flex-wrap:wrap}
+
+.w-img-placeholder{background:linear-gradient(135deg,var(--p-light),var(--g100));display:flex;align-items:center;justify-content:center;color:var(--g400)}
+
+.w-float-btn{position:absolute;bottom:72px;right:16px;width:56px;height:56px;background:var(--p);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 16px rgba(37,99,235,.4)}
+
+/* Annotation */
+.ann{background:var(--accent-light);border:1px dashed var(--accent);border-radius:8px;padding:12px 16px;margin:16px 0;font-size:.85rem;color:#92400e}
+.ann strong{display:block;margin-bottom:4px}
+
+/* Grid */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+
+/* Card doc */
+.card{background:#fff;border:1px solid var(--g200);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.card h3{font-size:1.1rem;margin-bottom:10px}
+ul.bl{padding-left:20px}
+ul.bl li{margin-bottom:6px;color:var(--g700)}
+
+.tag{display:inline-block;padding:3px 12px;border-radius:999px;font-size:.78rem;font-weight:600;margin:2px 4px 2px 0}
+.t-blue{background:var(--p-light);color:var(--p-dark)}
+.t-green{background:var(--ok-light);color:#065f46}
+
+/* Flow */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 0}
+.fs{background:var(--p-light);color:var(--p);padding:8px 16px;border-radius:8px;font-weight:600;font-size:.85rem;white-space:nowrap}
+.fa{color:var(--g300);font-size:1.2rem}
+
+footer{text-align:center;padding:36px 20px;color:var(--g500);font-size:.82rem;border-top:1px solid var(--g200);margin-top:48px;background:#fff}
+
+@media(max-width:768px){
+.hero h1{font-size:2rem}
+.toc-grid{grid-template-columns:1fr}
+.screen-row{flex-direction:column;align-items:center}
+.g2,.g3{grid-template-columns:1fr}
+}
+@media print{
+body{background:#fff}
+.hero{background:var(--p)!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+.phone{box-shadow:none;border:2px solid var(--g300)}
+section{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+<span class="doc-type">Wireframe & UI Mockup v1.0</span>
+<h1>Travel Buddy</h1>
+<p class="subtitle">Wireframe ทุกหน้าจอ MVP — Mobile First Design</p>
+<p class="tagline">ออกแบบจาก PRD v0.1 + BRD v1.0 + DB Schema v1.0</p>
+<div class="hero-meta">
+<div>Author: Surat Sritomya</div>
+<div>Date: July 2026</div>
+<div>Platform: Mobile First (375px)</div>
+</div>
+<div class="hero-stats">
+<div class="hero-stat"><div class="val">15</div><div class="lbl">Screens</div></div>
+<div class="hero-stat"><div class="val">MVP</div><div class="lbl">Scope</div></div>
+<div class="hero-stat"><div class="val">Mobile</div><div class="lbl">First</div></div>
+<div class="hero-stat"><div class="val">5</div><div class="lbl">Tab Nav</div></div>
+</div>
+</header>
+
+<!-- TOC -->
+<nav class="toc mx">
+<h2>สารบัญ — Wireframe Screens</h2>
+<div class="toc-grid">
+<a href="#s1"><span class="num">1</span>Screen Map & Navigation</a>
+<a href="#s2"><span class="num">2</span>W01–W03: Auth & Onboarding</a>
+<a href="#s3"><span class="num">3</span>W04–W05: Home & Browse Trips</a>
+<a href="#s4"><span class="num">4</span>W06–W07: Trip Detail & Create Trip</a>
+<a href="#s5"><span class="num">5</span>W08–W09: My Trips & Host Dashboard</a>
+<a href="#s6"><span class="num">6</span>W10–W11: Chat</a>
+<a href="#s7"><span class="num">7</span>W12–W14: Profile & Trust Passport</a>
+<a href="#s8"><span class="num">8</span>W15: Notifications</a>
+</div>
+</nav>
+
+<main class="mx">
+
+<!-- ══════════════════════════════════════ -->
+<!-- 1. SCREEN MAP                         -->
+<!-- ══════════════════════════════════════ -->
+<section id="s1">
+<div class="sh"><span class="sn">1</span><h2>Screen Map & Navigation</h2></div>
+
+<div class="card">
+<h3>Bottom Navigation (5 tabs)</h3>
+<div class="flow">
+<span class="fs">🏠 Home</span>
+<span class="fs">🔍 ค้นหา</span>
+<span class="fs">➕ สร้างทริป</span>
+<span class="fs">💬 แชท</span>
+<span class="fs">👤 โปรไฟล์</span>
+</div>
+</div>
+
+<div class="card">
+<h3>User Flow — MVP</h3>
+<div class="flow">
+<span class="fs">W01 Welcome</span><span class="fa">→</span>
+<span class="fs">W02 Login</span><span class="fa">→</span>
+<span class="fs">W03 Setup Profile</span><span class="fa">→</span>
+<span class="fs">W04 Home</span><span class="fa">→</span>
+<span class="fs">W05 Browse</span><span class="fa">→</span>
+<span class="fs">W06 Trip Detail</span><span class="fa">→</span>
+<span class="fs">W07 Create Trip</span>
+</div>
+<div class="flow">
+<span class="fs">W08 My Trips</span><span class="fa">→</span>
+<span class="fs">W09 Host Dashboard</span><span class="fa">→</span>
+<span class="fs">W10 Chat List</span><span class="fa">→</span>
+<span class="fs">W11 Trip Chat</span><span class="fa">→</span>
+<span class="fs">W12 My Profile</span><span class="fa">→</span>
+<span class="fs">W13 User Profile</span><span class="fa">→</span>
+<span class="fs">W14 Review</span><span class="fa">→</span>
+<span class="fs">W15 Notifications</span>
+</div>
+</div>
+
+<div class="card">
+<h3>Screen Summary</h3>
+<table style="width:100%;border-collapse:collapse;font-size:.88rem">
+<thead style="background:var(--g100)"><tr><th style="padding:10px 12px;text-align:left">Screen</th><th style="padding:10px 12px;text-align:left">หน้าจอ</th><th style="padding:10px 12px;text-align:left">Tab</th></tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W01</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Welcome / Splash</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">—</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W02</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Login / Register</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">—</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W03</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Setup Profile</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">—</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W04</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Home Feed</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">🏠 Home</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W05</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Browse & Filter Trips</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">🔍 ค้นหา</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W06</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Trip Detail</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">—</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W07</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Create Trip</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">➕ สร้างทริป</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W08</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">My Trips</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">🏠 Home</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W09</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Host Dashboard</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">—</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W10</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Chat List</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">💬 แชท</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W11</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Trip Chat Room</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">—</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W12</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">My Profile / Trust Passport</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">👤 โปรไฟล์</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W13</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Other User Profile</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">—</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W14</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Write Review</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">—</td></tr>
+<tr><td style="padding:8px 12px;border-top:1px solid var(--g200)">W15</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">Notifications</td><td style="padding:8px 12px;border-top:1px solid var(--g200)">—</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 2. AUTH & ONBOARDING                  -->
+<!-- ══════════════════════════════════════ -->
+<section id="s2">
+<div class="sh"><span class="sn">2</span><h2>W01–W03: Auth & Onboarding</h2></div>
+
+<div class="screen-row">
+
+<!-- W01 Welcome -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="background:linear-gradient(135deg,#1e3a8a,#2563eb,#0ea5e9);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;color:#fff;text-align:center;min-height:640px">
+<div style="font-size:4rem;margin-bottom:16px">✈️</div>
+<div style="font-size:2rem;font-weight:900;margin-bottom:8px">Travel Buddy</div>
+<div style="font-size:.9rem;opacity:.8;margin-bottom:48px;line-height:1.6">สร้างทริปใหม่ หาเพื่อนเดินทาง<br>แชร์ค่าใช้จ่าย อย่างปลอดภัย</div>
+<div style="width:100%">
+<div style="background:#fff;color:var(--p);padding:16px;border-radius:12px;font-weight:700;font-size:1rem;margin-bottom:12px">เริ่มต้นใช้งาน</div>
+<div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:16px;border-radius:12px;font-weight:700;font-size:1rem">เข้าสู่ระบบ</div>
+</div>
+<div style="margin-top:32px;font-size:.8rem;opacity:.5">Travel together. Share the experience.</div>
+</div>
+</div>
+<div class="phone-label">W01 — Welcome</div>
+<div class="phone-desc">Splash + CTA</div>
+</div>
+
+<!-- W02 Login -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:#fff">
+<div style="padding:40px 24px 24px;text-align:center">
+<div style="font-size:2.5rem;margin-bottom:8px">✈️</div>
+<div style="font-size:1.4rem;font-weight:800;margin-bottom:4px">ยินดีต้อนรับกลับ</div>
+<div style="font-size:.85rem;color:var(--g500);margin-bottom:32px">เข้าสู่ระบบเพื่อเริ่มเดินทาง</div>
+</div>
+<div class="w-btn w-btn-google" style="border:2px solid var(--g200);display:flex;align-items:center;justify-content:center;gap:8px">
+<span style="font-size:1.2rem">G</span> เข้าสู่ระบบด้วย Google
+</div>
+<div class="w-divider">หรือ</div>
+<div class="w-input-label">อีเมล</div>
+<div class="w-input">example@email.com</div>
+<div class="w-input-label">รหัสผ่าน</div>
+<div class="w-input">••••••••</div>
+<div style="padding:8px 16px;text-align:right"><span style="font-size:.8rem;color:var(--p)">ลืมรหัสผ่าน?</span></div>
+<div class="w-btn w-btn-primary">เข้าสู่ระบบ</div>
+<div class="w-divider">หรือ</div>
+<div class="w-btn w-btn-outline">เข้าสู่ระบบด้วย OTP</div>
+<div style="text-align:center;padding:24px;font-size:.85rem;color:var(--g500)">ยังไม่มีบัญชี? <span style="color:var(--p);font-weight:600">สมัครสมาชิก</span></div>
+</div>
+</div>
+<div class="phone-label">W02 — Login</div>
+<div class="phone-desc">Email / Google / OTP</div>
+</div>
+
+<!-- W03 Setup Profile -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:#fff">
+<div class="w-header"><div class="back">←</div> ตั้งค่าโปรไฟล์</div>
+<div style="text-align:center;padding:24px 16px 16px">
+<div class="w-avatar-xl" style="margin:0 auto;background:var(--p-light);color:var(--p)">📷</div>
+<div style="font-size:.8rem;color:var(--p);margin-top:8px;font-weight:600">อัปโหลดรูปภาพ</div>
+</div>
+<div class="w-input-label">ชื่อที่แสดง *</div>
+<div class="w-input">ชื่อเล่นของคุณ</div>
+<div class="w-input-label">จังหวัด *</div>
+<div class="w-input" style="display:flex;justify-content:space-between">เลือกจังหวัด <span>▼</span></div>
+<div class="w-input-label">ภาษา</div>
+<div style="padding:4px 16px">
+<span class="w-tag w-tag-blue">🇹🇭 ไทย</span>
+<span class="w-tag w-tag-gray">🇬🇧 English</span>
+<span class="w-tag" style="background:var(--g100);color:var(--g400);border:1px dashed var(--g300)">+ เพิ่ม</span>
+</div>
+<div class="w-input-label">ความสนใจ</div>
+<div style="padding:4px 16px">
+<span class="w-tag w-tag-blue">🏔 ภูเขา</span>
+<span class="w-tag w-tag-blue">🏖 ทะเล</span>
+<span class="w-tag w-tag-gray">🏛 วัด</span>
+<span class="w-tag w-tag-gray">🍜 อาหาร</span>
+<span class="w-tag w-tag-gray">🎒 แบคแพ็ค</span>
+<span class="w-tag w-tag-gray">🚗 ขับรถ</span>
+</div>
+<div class="w-input-label">Bio</div>
+<div class="w-input" style="min-height:60px">แนะนำตัวสั้นๆ...</div>
+<div style="padding:16px">
+<div class="w-btn w-btn-primary" style="margin:0">บันทึกโปรไฟล์</div>
+<div style="text-align:center;font-size:.8rem;color:var(--g400);margin-top:8px">ข้ามไปก่อน</div>
+</div>
+</div>
+</div>
+<div class="phone-label">W03 — Setup Profile</div>
+<div class="phone-desc">ตั้งค่าครั้งแรก + เลือก Interests</div>
+</div>
+
+</div><!-- /screen-row -->
+
+<div class="ann">
+<strong>📋 Design Notes — Auth Flow</strong>
+• Google Login = primary CTA (ใหญ่สุด สะดุดตา) เพราะลด friction ที่สุด<br>
+• OTP login สำหรับคนไม่มี Google Account<br>
+• Setup Profile ทำได้ทั้ง "ข้าม" และ "กรอกทีหลัง" — ไม่บังคับ<br>
+• Interests ใช้ chip/tag เลือกได้หลายอัน — นำไปใช้ใน Smart Matching
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 3. HOME & BROWSE                      -->
+<!-- ══════════════════════════════════════ -->
+<section id="s3">
+<div class="sh"><span class="sn">3</span><h2>W04–W05: Home & Browse Trips</h2></div>
+
+<div class="screen-row">
+
+<!-- W04 Home -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:var(--g50);padding-bottom:56px">
+<!-- Home header -->
+<div style="background:var(--p);color:#fff;padding:20px 20px 24px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+<div>
+<div style="font-size:.8rem;opacity:.7">สวัสดี 👋</div>
+<div style="font-size:1.1rem;font-weight:700">คุณสมชาย</div>
+</div>
+<div style="display:flex;gap:8px">
+<div class="w-avatar-sm" style="background:rgba(255,255,255,.2);color:#fff;font-size:.7rem">🔔</div>
+</div>
+</div>
+<div style="background:rgba(255,255,255,.15);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:8px;font-size:.9rem;opacity:.8">🔍 ค้นหาทริป จังหวัด สถานที่...</div>
+</div>
+
+<!-- Categories -->
+<div style="padding:16px 16px 8px;font-weight:700;font-size:.95rem">หมวดหมู่</div>
+<div style="display:flex;gap:12px;padding:0 16px;overflow-x:auto">
+<div style="text-align:center;flex-shrink:0">
+<div style="width:56px;height:56px;background:var(--p-light);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🏔</div>
+<div style="font-size:.7rem;margin-top:4px;color:var(--g700)">ภูเขา</div>
+</div>
+<div style="text-align:center;flex-shrink:0">
+<div style="width:56px;height:56px;background:var(--p-light);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🏖</div>
+<div style="font-size:.7rem;margin-top:4px;color:var(--g700)">ทะเล</div>
+</div>
+<div style="text-align:center;flex-shrink:0">
+<div style="width:56px;height:56px;background:var(--p-light);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🏛</div>
+<div style="font-size:.7rem;margin-top:4px;color:var(--g700)">วัฒนธรรม</div>
+</div>
+<div style="text-align:center;flex-shrink:0">
+<div style="width:56px;height:56px;background:var(--p-light);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🚗</div>
+<div style="font-size:.7rem;margin-top:4px;color:var(--g700)">Road Trip</div>
+</div>
+<div style="text-align:center;flex-shrink:0">
+<div style="width:56px;height:56px;background:var(--p-light);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🍜</div>
+<div style="font-size:.7rem;margin-top:4px;color:var(--g700)">อาหาร</div>
+</div>
+</div>
+
+<!-- Recommended -->
+<div style="display:flex;justify-content:space-between;padding:20px 16px 8px">
+<div style="font-weight:700;font-size:.95rem">ทริปแนะนำ</div>
+<div style="font-size:.8rem;color:var(--p)">ดูทั้งหมด →</div>
+</div>
+
+<!-- Trip Card 1 -->
+<div class="w-card">
+<div class="w-card-img w-img-placeholder">🏔 ดอยอินทนนท์</div>
+<div style="display:flex;justify-content:space-between;align-items:start">
+<div>
+<div style="font-weight:700;font-size:.95rem">เชียงใหม่ 3 วัน 2 คืน</div>
+<div style="font-size:.8rem;color:var(--g500);margin-top:2px">📅 15–17 ส.ค. · 👥 3/6 คน</div>
+</div>
+<div style="text-align:right">
+<div style="font-weight:700;color:var(--p);font-size:.9rem">฿2,500</div>
+<div style="font-size:.7rem;color:var(--g400)">/คน</div>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+<div class="w-avatar-sm" style="font-size:.6rem">👤</div>
+<span style="font-size:.8rem;color:var(--g700)">คุณวิชัย</span>
+<span class="w-tag w-tag-green" style="font-size:.65rem">✓ Verified</span>
+<span style="font-size:.8rem;color:var(--accent);margin-left:auto">★ 4.8</span>
+</div>
+</div>
+
+<!-- Trip Card 2 -->
+<div class="w-card">
+<div class="w-card-img w-card-img-sm w-img-placeholder">🏖</div>
+<div style="font-weight:700;font-size:.95rem">เกาะสมุย Chill Trip</div>
+<div style="font-size:.8rem;color:var(--g500);margin-top:2px">📅 22–25 ส.ค. · 👥 2/4 คน · ฿4,000/คน</div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="w-bottom-nav">
+<div class="w-nav-item active"><span class="nav-icon">🏠</span>Home</div>
+<div class="w-nav-item"><span class="nav-icon">🔍</span>ค้นหา</div>
+<div class="w-nav-item"><span class="nav-icon" style="background:var(--p);color:#fff;border-radius:50%;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:-2px">➕</span></div>
+<div class="w-nav-item"><span class="nav-icon">💬</span>แชท</div>
+<div class="w-nav-item"><span class="nav-icon">👤</span>โปรไฟล์</div>
+</div>
+</div>
+</div>
+<div class="phone-label">W04 — Home Feed</div>
+<div class="phone-desc">Search + Categories + ทริปแนะนำ</div>
+</div>
+
+<!-- W05 Browse -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:var(--g50);padding-bottom:56px">
+<div class="w-header">🔍 ค้นหาทริป</div>
+<div class="w-search">🔍 ค้นหา จังหวัด สถานที่ วันที่...</div>
+
+<!-- Filter chips -->
+<div style="padding:0 16px;display:flex;gap:6px;flex-wrap:wrap">
+<span class="w-tag" style="background:var(--p);color:#fff">📅 วันที่ ▼</span>
+<span class="w-tag w-tag-gray">📍 จังหวัด ▼</span>
+<span class="w-tag w-tag-gray">💰 งบ ▼</span>
+<span class="w-tag w-tag-gray">👥 จำนวน ▼</span>
+<span class="w-tag w-tag-gray">🏷 ประเภท ▼</span>
+</div>
+
+<!-- Sort -->
+<div style="display:flex;justify-content:space-between;padding:12px 16px;align-items:center">
+<div style="font-size:.8rem;color:var(--g500)">พบ 24 ทริป</div>
+<div style="font-size:.8rem;color:var(--p);font-weight:600">เรียง: ใกล้สุด ▼</div>
+</div>
+
+<!-- Result cards -->
+<div class="w-card">
+<div style="display:flex;gap:12px">
+<div style="width:80px;height:80px;background:var(--p-light);border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🏔</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:.9rem">เชียงใหม่ 3D2N</div>
+<div style="font-size:.78rem;color:var(--g500)">📅 15–17 ส.ค.</div>
+<div style="font-size:.78rem;color:var(--g500)">👥 3/6 คน · ฿2,500/คน</div>
+<div style="display:flex;align-items:center;gap:4px;margin-top:4px">
+<span class="w-tag w-tag-green" style="font-size:.6rem">✓ Verified</span>
+<span style="font-size:.78rem;color:var(--accent)">★ 4.8</span>
+</div>
+</div>
+<div style="font-size:.8rem;color:var(--p);font-weight:700">92%<div style="font-size:.6rem;color:var(--g400);font-weight:400">เข้ากัน</div></div>
+</div>
+</div>
+
+<div class="w-card">
+<div style="display:flex;gap:12px">
+<div style="width:80px;height:80px;background:var(--accent-light);border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🏖</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:.9rem">เกาะสมุย Chill</div>
+<div style="font-size:.78rem;color:var(--g500)">📅 22–25 ส.ค.</div>
+<div style="font-size:.78rem;color:var(--g500)">👥 2/4 คน · ฿4,000/คน</div>
+<div style="display:flex;align-items:center;gap:4px;margin-top:4px">
+<span class="w-tag w-tag-blue" style="font-size:.6rem">📞 Phone</span>
+<span style="font-size:.78rem;color:var(--accent)">★ 4.5</span>
+</div>
+</div>
+<div style="font-size:.8rem;color:var(--ok);font-weight:700">87%<div style="font-size:.6rem;color:var(--g400);font-weight:400">เข้ากัน</div></div>
+</div>
+</div>
+
+<div class="w-card">
+<div style="display:flex;gap:12px">
+<div style="width:80px;height:80px;background:var(--ok-light);border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🚗</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:.9rem">Road Trip เขาค้อ</div>
+<div style="font-size:.78rem;color:var(--g500)">📅 1–2 ก.ย.</div>
+<div style="font-size:.78rem;color:var(--g500)">👥 1/3 คน · ฿1,800/คน</div>
+<div style="display:flex;align-items:center;gap:4px;margin-top:4px">
+<span class="w-tag w-tag-green" style="font-size:.6rem">✓ Verified</span>
+<span style="font-size:.78rem;color:var(--accent)">★ 4.9</span>
+</div>
+</div>
+<div style="font-size:.8rem;color:var(--accent);font-weight:700">78%<div style="font-size:.6rem;color:var(--g400);font-weight:400">เข้ากัน</div></div>
+</div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="w-bottom-nav">
+<div class="w-nav-item"><span class="nav-icon">🏠</span>Home</div>
+<div class="w-nav-item active"><span class="nav-icon">🔍</span>ค้นหา</div>
+<div class="w-nav-item"><span class="nav-icon" style="background:var(--p);color:#fff;border-radius:50%;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:-2px">➕</span></div>
+<div class="w-nav-item"><span class="nav-icon">💬</span>แชท</div>
+<div class="w-nav-item"><span class="nav-icon">👤</span>โปรไฟล์</div>
+</div>
+</div>
+</div>
+<div class="phone-label">W05 — Browse & Filter</div>
+<div class="phone-desc">Filter chips + Compatibility % + Sort</div>
+</div>
+
+</div><!-- /screen-row -->
+
+<div class="ann">
+<strong>📋 Design Notes — Home & Browse</strong>
+• Home ใช้ Hero header สี primary + Search bar ด้านบน<br>
+• Categories ใช้ horizontal scroll — icon + label<br>
+• Trip card แสดง: รูป, ชื่อ, วันที่, จำนวนคน, งบ, Host + Trust badge, Rating<br>
+• Browse แสดง Compatibility Score (%) ขวาสุด — จาก Smart Matching<br>
+• Filter ใช้ chip buttons — กดเพื่อเปิด bottom sheet
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 4. TRIP DETAIL & CREATE TRIP          -->
+<!-- ══════════════════════════════════════ -->
+<section id="s4">
+<div class="sh"><span class="sn">4</span><h2>W06–W07: Trip Detail & Create Trip</h2></div>
+
+<div class="screen-row">
+
+<!-- W06 Trip Detail -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:#fff;padding-bottom:72px;overflow-y:auto">
+<!-- Cover image -->
+<div style="height:200px;background:linear-gradient(135deg,var(--p-light),#bfdbfe);display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative">
+🏔
+<div style="position:absolute;top:12px;left:12px;width:32px;height:32px;background:rgba(0,0,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem">←</div>
+<div style="position:absolute;top:12px;right:12px;display:flex;gap:8px">
+<div style="width:32px;height:32px;background:rgba(0,0,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem">♡</div>
+<div style="width:32px;height:32px;background:rgba(0,0,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem">⋯</div>
+</div>
+</div>
+
+<!-- Trip info -->
+<div style="padding:16px">
+<div style="display:flex;justify-content:space-between;align-items:start">
+<div style="font-size:1.2rem;font-weight:800">เชียงใหม่ 3 วัน 2 คืน</div>
+<div style="background:var(--p-light);color:var(--p);padding:4px 10px;border-radius:999px;font-size:.7rem;font-weight:700">Published</div>
+</div>
+<div style="display:flex;gap:12px;margin-top:8px;font-size:.82rem;color:var(--g500)">
+<span>📅 15–17 ส.ค.</span>
+<span>📍 เชียงใหม่</span>
+</div>
+<div style="display:flex;gap:12px;margin-top:4px;font-size:.82rem;color:var(--g500)">
+<span>👥 3/6 คน</span>
+<span>💰 ฿2,500/คน</span>
+</div>
+<div style="margin-top:8px">
+<span class="w-tag w-tag-blue">🏔 ภูเขา</span>
+<span class="w-tag w-tag-blue">🌿 ธรรมชาติ</span>
+<span class="w-tag w-tag-blue">📷 ถ่ายรูป</span>
+</div>
+</div>
+
+<!-- Compatibility -->
+<div style="margin:0 16px;padding:16px;background:var(--ok-light);border-radius:var(--r);text-align:center">
+<div style="font-size:2rem;font-weight:900;color:var(--ok)">92%</div>
+<div style="font-size:.82rem;color:#065f46;font-weight:600">คุณเข้ากับทริปนี้</div>
+<div style="font-size:.7rem;color:var(--g500);margin-top:4px">งบ ✓ · สไตล์ ✓ · ภาษา ✓ · ช่วงอายุ ✓</div>
+</div>
+
+<!-- Host card -->
+<div style="margin:12px 16px;padding:14px;border:1px solid var(--g200);border-radius:var(--r);display:flex;align-items:center;gap:12px">
+<div class="w-avatar" style="font-size:1rem">👤</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:.9rem">คุณวิชัย <span class="w-tag w-tag-green" style="font-size:.6rem">✓ Verified</span></div>
+<div style="font-size:.78rem;color:var(--g500)">Trust Score: 94 · ★ 4.8 · 12 ทริป</div>
+</div>
+<div style="font-size:.8rem;color:var(--p)">ดูโปรไฟล์ →</div>
+</div>
+
+<!-- Description -->
+<div style="padding:0 16px">
+<div style="font-weight:700;font-size:.9rem;margin-bottom:6px">รายละเอียด</div>
+<div style="font-size:.82rem;color:var(--g700);line-height:1.6">ชวนไปเที่ยวเชียงใหม่กัน! แพลนคือขึ้นดอยอินทนนท์ เดินเล่นถนนคนเดิน กินข้าวซอย พักรีสอร์ทน่ารักๆ บรรยากาศดี...</div>
+</div>
+
+<!-- Members -->
+<div style="padding:12px 16px">
+<div style="font-weight:700;font-size:.9rem;margin-bottom:8px">สมาชิก (3/6)</div>
+<div style="display:flex;gap:-8px">
+<div class="w-avatar-sm" style="font-size:.6rem;border:2px solid #fff">👤</div>
+<div class="w-avatar-sm" style="font-size:.6rem;border:2px solid #fff;margin-left:-8px">👩</div>
+<div class="w-avatar-sm" style="font-size:.6rem;border:2px solid #fff;margin-left:-8px">🧑</div>
+<div class="w-avatar-sm" style="font-size:.6rem;border:2px solid #fff;margin-left:-8px;background:var(--g100);color:var(--g500)">+3</div>
+</div>
+</div>
+
+<!-- Join button (fixed bottom) -->
+<div style="position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:#fff;border-top:1px solid var(--g200);display:flex;gap:8px">
+<div style="flex:1;background:var(--p);color:#fff;padding:14px;border-radius:10px;text-align:center;font-weight:700">ขอเข้าร่วมทริป</div>
+<div style="width:48px;height:48px;border:2px solid var(--g200);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem">💬</div>
+</div>
+</div>
+</div>
+<div class="phone-label">W06 — Trip Detail</div>
+<div class="phone-desc">Compatibility Score + Host + Join CTA</div>
+</div>
+
+<!-- W07 Create Trip -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:#fff">
+<div class="w-header"><div class="back">←</div> สร้างทริป <div class="spacer"></div><span style="font-size:.8rem;opacity:.7">1/2</span></div>
+
+<!-- Progress bar -->
+<div style="height:4px;background:var(--g100);margin:0">
+<div style="height:4px;background:var(--p);width:50%"></div>
+</div>
+
+<div style="padding:20px 16px 8px;font-size:.85rem;color:var(--g500)">ข้อมูลพื้นฐาน</div>
+
+<div class="w-input-label">ชื่อทริป *</div>
+<div class="w-input">เช่น เชียงใหม่ 3 วัน 2 คืน</div>
+
+<div class="w-input-label">สถานที่ *</div>
+<div class="w-input" style="display:flex;justify-content:space-between">📍 เลือกจังหวัด / ประเทศ <span>▼</span></div>
+
+<div style="display:flex;gap:8px;padding:0 16px">
+<div style="flex:1">
+<div class="w-input-label" style="margin-left:0">วันเริ่ม *</div>
+<div class="w-input" style="margin-left:0">📅 เลือกวัน</div>
+</div>
+<div style="flex:1">
+<div class="w-input-label" style="margin-left:0">วันสิ้นสุด *</div>
+<div class="w-input" style="margin-left:0">📅 เลือกวัน</div>
+</div>
+</div>
+
+<div style="display:flex;gap:8px;padding:0 16px">
+<div style="flex:1">
+<div class="w-input-label" style="margin-left:0">จำนวนคน *</div>
+<div class="w-input" style="margin-left:0;display:flex;justify-content:space-between"><span>2</span><span>▼</span></div>
+</div>
+<div style="flex:1">
+<div class="w-input-label" style="margin-left:0">งบ/คน (฿) *</div>
+<div class="w-input" style="margin-left:0">฿ 0</div>
+</div>
+</div>
+
+<div class="w-input-label">ประเภททริป *</div>
+<div style="padding:4px 16px;display:flex;flex-wrap:wrap;gap:6px">
+<span class="w-tag w-tag-blue">🏔 ภูเขา</span>
+<span class="w-tag w-tag-gray">🏖 ทะเล</span>
+<span class="w-tag w-tag-gray">🏛 วัฒนธรรม</span>
+<span class="w-tag w-tag-gray">🚗 Road Trip</span>
+<span class="w-tag w-tag-gray">🍜 อาหาร</span>
+<span class="w-tag w-tag-gray">🎒 แบคแพ็ค</span>
+</div>
+
+<div class="w-input-label">รายละเอียด</div>
+<div class="w-input" style="min-height:80px">อธิบายแพลน กิจกรรม ที่พัก...</div>
+
+<div class="w-input-label">รูปภาพปก</div>
+<div style="margin:8px 16px;height:60px;border:2px dashed var(--g300);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--g400);font-size:.85rem">📷 อัปโหลดรูป</div>
+
+<div class="w-btn w-btn-primary">ถัดไป →</div>
+</div>
+</div>
+<div class="phone-label">W07 — Create Trip</div>
+<div class="phone-desc">Multi-step form + Tag selection</div>
+</div>
+
+</div>
+
+<div class="ann">
+<strong>📋 Design Notes — Trip Detail & Create</strong>
+• Trip Detail: Cover image ขนาดใหญ่ + Overlay back/favorite buttons<br>
+• Compatibility Score แสดง prominent ด้วยสีเขียว พร้อมรายละเอียดว่าเข้ากันเรื่องอะไรบ้าง<br>
+• Host card แสดง Trust Score + Badge + Rating — กดเพื่อดูโปรไฟล์เต็ม<br>
+• Join button = Fixed bottom CTA + ปุ่มแชทข้างๆ<br>
+• Create Trip ใช้ Multi-step form (2 ขั้น) — ลด cognitive load<br>
+• ประเภททริปเลือกด้วย tag chips (multi-select)
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 5. MY TRIPS & HOST DASHBOARD          -->
+<!-- ══════════════════════════════════════ -->
+<section id="s5">
+<div class="sh"><span class="sn">5</span><h2>W08–W09: My Trips & Host Dashboard</h2></div>
+
+<div class="screen-row">
+
+<!-- W08 My Trips -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:var(--g50);padding-bottom:56px">
+<div class="w-header">🗓 ทริปของฉัน</div>
+<div class="w-tabs">
+<div class="w-tab active">ที่ฉันสร้าง (3)</div>
+<div class="w-tab">ที่ฉันเข้าร่วม (2)</div>
+</div>
+
+<!-- Trip cards -->
+<div class="w-card" style="border-left:3px solid var(--p)">
+<div style="display:flex;justify-content:space-between;align-items:start">
+<div>
+<div style="font-weight:700;font-size:.9rem">เชียงใหม่ 3D2N</div>
+<div style="font-size:.78rem;color:var(--g500)">📅 15–17 ส.ค. · 👥 3/6</div>
+</div>
+<span class="w-tag w-tag-blue">Published</span>
+</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<div class="w-btn-sm" style="background:var(--p-light);color:var(--p)">จัดการ</div>
+<div class="w-btn-sm" style="background:var(--g100);color:var(--g700)">แก้ไข</div>
+</div>
+</div>
+
+<div class="w-card" style="border-left:3px solid var(--ok)">
+<div style="display:flex;justify-content:space-between;align-items:start">
+<div>
+<div style="font-weight:700;font-size:.9rem">กาญจนบุรี ล่องแพ</div>
+<div style="font-size:.78rem;color:var(--g500)">📅 1–3 ก.ค. · 👥 5/5</div>
+</div>
+<span class="w-tag w-tag-green">Completed</span>
+</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<div class="w-btn-sm" style="background:var(--accent-light);color:#92400e">รีวิว</div>
+</div>
+</div>
+
+<div class="w-card" style="border-left:3px solid var(--g300)">
+<div style="display:flex;justify-content:space-between;align-items:start">
+<div>
+<div style="font-weight:700;font-size:.9rem">ภูเก็ต Beach Party</div>
+<div style="font-size:.78rem;color:var(--g500)">📅 ยังไม่กำหนด · 👥 0/8</div>
+</div>
+<span class="w-tag w-tag-gray">Draft</span>
+</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<div class="w-btn-sm" style="background:var(--g100);color:var(--g700)">แก้ไข</div>
+<div class="w-btn-sm" style="background:var(--p);color:#fff">เผยแพร่</div>
+</div>
+</div>
+
+<div class="w-bottom-nav">
+<div class="w-nav-item active"><span class="nav-icon">🏠</span>Home</div>
+<div class="w-nav-item"><span class="nav-icon">🔍</span>ค้นหา</div>
+<div class="w-nav-item"><span class="nav-icon" style="background:var(--p);color:#fff;border-radius:50%;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:-2px">➕</span></div>
+<div class="w-nav-item"><span class="nav-icon">💬</span>แชท</div>
+<div class="w-nav-item"><span class="nav-icon">👤</span>โปรไฟล์</div>
+</div>
+</div>
+</div>
+<div class="phone-label">W08 — My Trips</div>
+<div class="phone-desc">Tabs: สร้าง / เข้าร่วม + Status tags</div>
+</div>
+
+<!-- W09 Host Dashboard -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:var(--g50)">
+<div class="w-header"><div class="back">←</div> จัดการทริป</div>
+
+<!-- Trip summary -->
+<div style="padding:16px;background:#fff;border-bottom:1px solid var(--g200)">
+<div style="font-weight:700;font-size:1rem">เชียงใหม่ 3D2N</div>
+<div style="font-size:.8rem;color:var(--g500)">📅 15–17 ส.ค. · 👥 3/6 คน</div>
+</div>
+
+<!-- Stats -->
+<div style="display:flex;gap:8px;padding:12px 16px">
+<div style="flex:1;background:#fff;border:1px solid var(--g200);border-radius:8px;padding:12px;text-align:center">
+<div style="font-size:1.2rem;font-weight:800;color:var(--p)">3</div>
+<div style="font-size:.7rem;color:var(--g500)">สมาชิก</div>
+</div>
+<div style="flex:1;background:#fff;border:1px solid var(--g200);border-radius:8px;padding:12px;text-align:center">
+<div style="font-size:1.2rem;font-weight:800;color:var(--accent)">2</div>
+<div style="font-size:.7rem;color:var(--g500)">รออนุมัติ</div>
+</div>
+<div style="flex:1;background:#fff;border:1px solid var(--g200);border-radius:8px;padding:12px;text-align:center">
+<div style="font-size:1.2rem;font-weight:800;color:var(--ok)">3</div>
+<div style="font-size:.7rem;color:var(--g500)">ว่างอีก</div>
+</div>
+</div>
+
+<!-- Pending requests -->
+<div style="padding:12px 16px 4px;font-weight:700;font-size:.9rem;color:var(--accent)">🔔 คำขอเข้าร่วม (2)</div>
+
+<div class="w-card" style="border-left:3px solid var(--accent)">
+<div style="display:flex;gap:12px;align-items:center">
+<div class="w-avatar" style="font-size:1rem">👩</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:.85rem">คุณมาลี <span class="w-tag w-tag-green" style="font-size:.6rem">✓ Verified</span></div>
+<div style="font-size:.75rem;color:var(--g500)">Trust: 88 · ★ 4.7 · 8 ทริป</div>
+<div style="font-size:.75rem;color:var(--ok);font-weight:600">เข้ากัน 95%</div>
+</div>
+</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<div class="w-btn-sm" style="background:var(--ok);color:#fff;flex:1;text-align:center">✓ อนุมัติ</div>
+<div class="w-btn-sm" style="background:var(--err-light);color:var(--err);flex:1;text-align:center">✗ ปฏิเสธ</div>
+<div class="w-btn-sm" style="background:var(--g100);color:var(--g700)">โปรไฟล์</div>
+</div>
+</div>
+
+<div class="w-card" style="border-left:3px solid var(--accent)">
+<div style="display:flex;gap:12px;align-items:center">
+<div class="w-avatar" style="font-size:1rem">🧑</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:.85rem">คุณธนา <span class="w-tag w-tag-blue" style="font-size:.6rem">📞 Phone</span></div>
+<div style="font-size:.75rem;color:var(--g500)">Trust: 72 · ★ 4.2 · 3 ทริป</div>
+<div style="font-size:.75rem;color:var(--accent);font-weight:600">เข้ากัน 78%</div>
+</div>
+</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<div class="w-btn-sm" style="background:var(--ok);color:#fff;flex:1;text-align:center">✓ อนุมัติ</div>
+<div class="w-btn-sm" style="background:var(--err-light);color:var(--err);flex:1;text-align:center">✗ ปฏิเสธ</div>
+<div class="w-btn-sm" style="background:var(--g100);color:var(--g700)">โปรไฟล์</div>
+</div>
+</div>
+
+<!-- Approved members -->
+<div style="padding:12px 16px 4px;font-weight:700;font-size:.9rem;color:var(--ok)">✓ สมาชิก (3)</div>
+<div class="w-card">
+<div style="display:flex;gap:12px;align-items:center;padding:4px 0">
+<div class="w-avatar-sm" style="font-size:.6rem">👤</div>
+<div style="flex:1;font-size:.85rem;font-weight:600">คุณวิชัย (Host)</div>
+<span class="w-tag w-tag-green" style="font-size:.6rem">Host</span>
+</div>
+<div style="display:flex;gap:12px;align-items:center;padding:4px 0;border-top:1px solid var(--g100);margin-top:4px">
+<div class="w-avatar-sm" style="font-size:.6rem">👩</div>
+<div style="flex:1;font-size:.85rem">คุณสมศรี</div>
+<span style="font-size:.75rem;color:var(--g400)">ลบ</span>
+</div>
+<div style="display:flex;gap:12px;align-items:center;padding:4px 0;border-top:1px solid var(--g100);margin-top:4px">
+<div class="w-avatar-sm" style="font-size:.6rem">🧑</div>
+<div style="flex:1;font-size:.85rem">คุณเอก</div>
+<span style="font-size:.75rem;color:var(--g400)">ลบ</span>
+</div>
+</div>
+
+</div>
+</div>
+<div class="phone-label">W09 — Host Dashboard</div>
+<div class="phone-desc">Approve/Reject + Members + Stats</div>
+</div>
+
+</div>
+
+<div class="ann">
+<strong>📋 Design Notes — My Trips & Host Dashboard</strong>
+• My Trips: แยก tabs "ที่ฉันสร้าง" vs "ที่ฉันเข้าร่วม" — color-coded border ตาม status<br>
+• Host Dashboard: แสดง stats ด้านบน (สมาชิก, รออนุมัติ, ว่างอีก)<br>
+• คำขอเข้าร่วม: แสดง Trust Score + Compatibility % ช่วย Host ตัดสินใจ<br>
+• ปุ่ม Approve/Reject ชัดเจน สีเขียว/แดง + ดูโปรไฟล์ก่อนอนุมัติ<br>
+• Anonymous Matching: Host เห็นแค่ Trust Score / Compatibility / Badge — ไม่เห็นข้อมูลส่วนตัว จนกว่าจะ Approve
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 6. CHAT                               -->
+<!-- ══════════════════════════════════════ -->
+<section id="s6">
+<div class="sh"><span class="sn">6</span><h2>W10–W11: Chat</h2></div>
+
+<div class="screen-row">
+
+<!-- W10 Chat List -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:var(--g50);padding-bottom:56px">
+<div class="w-header">💬 แชท</div>
+
+<!-- Chat room items -->
+<div style="background:#fff">
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100);background:var(--p-bg)">
+<div class="w-avatar" style="font-size:1rem;background:var(--p-light)">🏔</div>
+<div style="flex:1;min-width:0">
+<div style="display:flex;justify-content:space-between">
+<div style="font-weight:700;font-size:.88rem">เชียงใหม่ 3D2N</div>
+<div style="font-size:.7rem;color:var(--g400)">12:30</div>
+</div>
+<div style="font-size:.8rem;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">คุณสมศรี: เจอกันสถานีรถไฟนะ...</div>
+</div>
+<div class="w-badge">2</div>
+</div>
+
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100)">
+<div class="w-avatar" style="font-size:1rem;background:var(--ok-light)">🏖</div>
+<div style="flex:1;min-width:0">
+<div style="display:flex;justify-content:space-between">
+<div style="font-weight:700;font-size:.88rem">เกาะสมุย Chill</div>
+<div style="font-size:.7rem;color:var(--g400)">เมื่อวาน</div>
+</div>
+<div style="font-size:.8rem;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">คุณวิชัย: รอเที่ยวบิน confirm...</div>
+</div>
+</div>
+
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100)">
+<div class="w-avatar" style="font-size:1rem;background:var(--accent-light)">🚗</div>
+<div style="flex:1;min-width:0">
+<div style="display:flex;justify-content:space-between">
+<div style="font-weight:700;font-size:.88rem">Road Trip เขาค้อ</div>
+<div style="font-size:.7rem;color:var(--g400)">3 วันก่อน</div>
+</div>
+<div style="font-size:.8rem;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">คุณเอก: ผมขับรถไปเองครับ</div>
+</div>
+</div>
+</div>
+
+<div style="padding:32px;text-align:center;color:var(--g400);font-size:.85rem">แชทจะปรากฏเมื่อคุณเข้าร่วมทริป</div>
+
+<div class="w-bottom-nav">
+<div class="w-nav-item"><span class="nav-icon">🏠</span>Home</div>
+<div class="w-nav-item"><span class="nav-icon">🔍</span>ค้นหา</div>
+<div class="w-nav-item"><span class="nav-icon" style="background:var(--p);color:#fff;border-radius:50%;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:-2px">➕</span></div>
+<div class="w-nav-item active"><span class="nav-icon">💬<span class="nav-dot"></span></span>แชท</div>
+<div class="w-nav-item"><span class="nav-icon">👤</span>โปรไฟล์</div>
+</div>
+</div>
+</div>
+<div class="phone-label">W10 — Chat List</div>
+<div class="phone-desc">Trip-based chat rooms + Unread badge</div>
+</div>
+
+<!-- W11 Trip Chat -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:var(--g50);display:flex;flex-direction:column">
+<div class="w-header"><div class="back">←</div> เชียงใหม่ 3D2N <div class="spacer"></div><span style="font-size:.75rem;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:4px">👥 3</span></div>
+
+<!-- Messages -->
+<div style="flex:1;padding:12px 16px;overflow-y:auto">
+<!-- Date divider -->
+<div style="text-align:center;font-size:.7rem;color:var(--g400);margin:8px 0">วันนี้</div>
+
+<!-- Other message -->
+<div style="display:flex;gap:8px;margin-bottom:12px">
+<div class="w-avatar-sm" style="font-size:.6rem;flex-shrink:0">👩</div>
+<div>
+<div style="font-size:.7rem;color:var(--g500);margin-bottom:2px">คุณสมศรี</div>
+<div style="background:#fff;padding:10px 14px;border-radius:0 12px 12px 12px;font-size:.85rem;max-width:240px;border:1px solid var(--g200)">เจอกันสถานีรถไฟเชียงใหม่นะคะ ตอน 10 โมงเช้า</div>
+<div style="font-size:.65rem;color:var(--g400);margin-top:2px">12:28</div>
+</div>
+</div>
+
+<!-- Other message with image -->
+<div style="display:flex;gap:8px;margin-bottom:12px">
+<div class="w-avatar-sm" style="font-size:.6rem;flex-shrink:0">🧑</div>
+<div>
+<div style="font-size:.7rem;color:var(--g500);margin-bottom:2px">คุณเอก</div>
+<div style="background:#fff;border-radius:0 12px 12px 12px;overflow:hidden;max-width:200px;border:1px solid var(--g200)">
+<div style="height:100px;background:var(--p-light);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🗺</div>
+<div style="padding:8px 12px;font-size:.85rem">แชร์ Location ร้านกาแฟ</div>
+</div>
+<div style="font-size:.65rem;color:var(--g400);margin-top:2px">12:30</div>
+</div>
+</div>
+
+<!-- My message -->
+<div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+<div>
+<div style="background:var(--p);color:#fff;padding:10px 14px;border-radius:12px 0 12px 12px;font-size:.85rem;max-width:240px">ได้ครับ! ผมจะไปถึงประมาณ 9:45 รอตรงหน้าสถานี</div>
+<div style="font-size:.65rem;color:var(--g400);margin-top:2px;text-align:right">12:32 ✓✓</div>
+</div>
+</div>
+
+<!-- Other message -->
+<div style="display:flex;gap:8px;margin-bottom:12px">
+<div class="w-avatar-sm" style="font-size:.6rem;flex-shrink:0">👩</div>
+<div>
+<div style="font-size:.7rem;color:var(--g500);margin-bottom:2px">คุณสมศรี</div>
+<div style="background:#fff;padding:10px 14px;border-radius:0 12px 12px 12px;font-size:.85rem;max-width:240px;border:1px solid var(--g200)">ดีเลยค่ะ 👍</div>
+<div style="font-size:.65rem;color:var(--g400);margin-top:2px">12:33</div>
+</div>
+</div>
+</div>
+
+<!-- Input -->
+<div style="padding:8px 12px;background:#fff;border-top:1px solid var(--g200);display:flex;gap:8px;align-items:center">
+<div style="width:32px;height:32px;background:var(--g100);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0">📷</div>
+<div style="width:32px;height:32px;background:var(--g100);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0">📍</div>
+<div style="flex:1;padding:8px 12px;background:var(--g100);border-radius:20px;font-size:.85rem;color:var(--g400)">พิมพ์ข้อความ...</div>
+<div style="width:32px;height:32px;background:var(--p);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;flex-shrink:0">➤</div>
+</div>
+</div>
+</div>
+<div class="phone-label">W11 — Trip Chat</div>
+<div class="phone-desc">Messages + รูป + Location + Send</div>
+</div>
+
+</div>
+
+<div class="ann">
+<strong>📋 Design Notes — Chat</strong>
+• Chat List: แสดงเฉพาะทริปที่ Approved — ไฮไลท์ห้องที่มี unread (สีฟ้าอ่อน + badge จำนวน)<br>
+• Trip Chat: Group chat ตาม trip — แสดง avatar + ชื่อ + timestamp<br>
+• รองรับ: ข้อความ, รูป, แชร์ Location — ใช้ Supabase Realtime<br>
+• ข้อความของตัวเอง = สีน้ำเงิน ชิดขวา / ของคนอื่น = สีขาว ชิดซ้าย<br>
+• ด้านบนแสดงจำนวนสมาชิก กดเพื่อดูรายชื่อ
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 7. PROFILE & TRUST PASSPORT           -->
+<!-- ══════════════════════════════════════ -->
+<section id="s7">
+<div class="sh"><span class="sn">7</span><h2>W12–W14: Profile & Trust Passport</h2></div>
+
+<div class="screen-row">
+
+<!-- W12 My Profile -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:var(--g50);padding-bottom:56px">
+<!-- Profile header -->
+<div style="background:var(--p);color:#fff;padding:24px 20px;text-align:center">
+<div class="w-avatar-xl" style="margin:0 auto;background:rgba(255,255,255,.2);font-size:2rem">👤</div>
+<div style="font-size:1.2rem;font-weight:700;margin-top:8px">คุณสมชาย</div>
+<div style="font-size:.8rem;opacity:.7">กรุงเทพฯ · สมาชิกตั้งแต่ ก.ค. 2026</div>
+<div style="margin-top:8px">
+<span style="background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px;font-size:.7rem">✓ Fully Verified</span>
+</div>
+</div>
+
+<!-- Trust Score -->
+<div style="margin:-20px 16px 0;background:#fff;border-radius:var(--r);padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.08);position:relative;z-index:1">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font-size:.75rem;color:var(--g500);text-transform:uppercase;letter-spacing:1px;font-weight:600">Trust Score</div>
+<div style="font-size:2.5rem;font-weight:900;color:var(--p)">94<span style="font-size:1rem;color:var(--g400)">/100</span></div>
+</div>
+<div style="display:flex;gap:8px;text-align:center">
+<div style="flex:1"><div style="font-size:1.1rem;font-weight:700;color:var(--g900)">12</div><div style="font-size:.65rem;color:var(--g500)">ทริป</div></div>
+<div style="flex:1"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">★ 4.8</div><div style="font-size:.65rem;color:var(--g500)">Rating</div></div>
+<div style="flex:1"><div style="font-size:1.1rem;font-weight:700;color:var(--ok)">2%</div><div style="font-size:.65rem;color:var(--g500)">ยกเลิก</div></div>
+<div style="flex:1"><div style="font-size:1.1rem;font-weight:700;color:var(--p)">Lv.3</div><div style="font-size:.65rem;color:var(--g500)">KYC</div></div>
+</div>
+</div>
+
+<!-- Badges -->
+<div style="padding:16px 16px 0">
+<div style="font-weight:700;font-size:.9rem;margin-bottom:8px">🏅 Badges</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<span class="w-tag w-tag-green">✓ Fully Verified</span>
+<span class="w-tag w-tag-blue">🏔 10+ Trips</span>
+<span class="w-tag w-tag-yellow">⭐ Top Host</span>
+</div>
+</div>
+
+<!-- Menu items -->
+<div style="padding:16px">
+<div style="background:#fff;border-radius:var(--r);overflow:hidden;border:1px solid var(--g200)">
+<div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--g100)"><span style="font-size:.88rem">✏️ แก้ไขโปรไฟล์</span><span style="color:var(--g400)">→</span></div>
+<div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--g100)"><span style="font-size:.88rem">🔒 ตั้งค่าความเป็นส่วนตัว</span><span style="color:var(--g400)">→</span></div>
+<div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--g100)"><span style="font-size:.88rem">🛡 ยืนยันตัวตน</span><span style="color:var(--g400)">→</span></div>
+<div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--g100)"><span style="font-size:.88rem">❤️ ทริปที่ชอบ</span><span style="color:var(--g400)">→</span></div>
+<div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:.88rem;color:var(--err)">🚪 ออกจากระบบ</span><span style="color:var(--g400)">→</span></div>
+</div>
+</div>
+
+<div class="w-bottom-nav">
+<div class="w-nav-item"><span class="nav-icon">🏠</span>Home</div>
+<div class="w-nav-item"><span class="nav-icon">🔍</span>ค้นหา</div>
+<div class="w-nav-item"><span class="nav-icon" style="background:var(--p);color:#fff;border-radius:50%;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:-2px">➕</span></div>
+<div class="w-nav-item"><span class="nav-icon">💬</span>แชท</div>
+<div class="w-nav-item active"><span class="nav-icon">👤</span>โปรไฟล์</div>
+</div>
+</div>
+</div>
+<div class="phone-label">W12 — My Profile</div>
+<div class="phone-desc">Trust Passport + Badges + Menu</div>
+</div>
+
+<!-- W13 Other User Profile -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:var(--g50)">
+<div class="w-header"><div class="back">←</div> โปรไฟล์ <div class="spacer"></div><span style="font-size:.8rem">⚠️</span></div>
+
+<!-- Profile header -->
+<div style="text-align:center;padding:24px 16px 16px;background:#fff;border-bottom:1px solid var(--g200)">
+<div class="w-avatar-xl" style="margin:0 auto;font-size:2rem">👩</div>
+<div style="font-size:1.2rem;font-weight:700;margin-top:8px">คุณมาลี</div>
+<div style="font-size:.82rem;color:var(--g500)">เชียงใหม่ · 🇹🇭 ไทย · 🇬🇧 English</div>
+<div style="margin-top:8px">
+<span class="w-tag w-tag-green">✓ Verified</span>
+<span class="w-tag w-tag-yellow">⭐ Top Host</span>
+</div>
+</div>
+
+<!-- Trust Score card -->
+<div style="margin:12px 16px;background:#fff;border:1px solid var(--g200);border-radius:var(--r);padding:16px">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font-size:.7rem;color:var(--g500);text-transform:uppercase;letter-spacing:1px;font-weight:600">Trust Score</div>
+<div style="font-size:2rem;font-weight:900;color:var(--p)">88<span style="font-size:.9rem;color:var(--g400)">/100</span></div>
+</div>
+<div style="display:flex;gap:8px;text-align:center">
+<div style="flex:1"><div style="font-weight:700">8</div><div style="font-size:.65rem;color:var(--g500)">ทริป</div></div>
+<div style="flex:1"><div style="font-weight:700;color:var(--accent)">★ 4.7</div><div style="font-size:.65rem;color:var(--g500)">Rating</div></div>
+<div style="flex:1"><div style="font-weight:700;color:var(--ok)">0%</div><div style="font-size:.65rem;color:var(--g500)">ยกเลิก</div></div>
+</div>
+</div>
+
+<!-- Bio -->
+<div style="margin:0 16px;background:#fff;border:1px solid var(--g200);border-radius:var(--r);padding:16px">
+<div style="font-weight:700;font-size:.85rem;margin-bottom:6px">เกี่ยวกับ</div>
+<div style="font-size:.82rem;color:var(--g700);line-height:1.6">ชอบท่องเที่ยวทะเล ภูเขา ถ่ายรูป กินอาหารพื้นเมือง ไปมาแล้ว 20+ จังหวัด 🌏</div>
+<div style="margin-top:8px">
+<span class="w-tag w-tag-blue">🏖 ทะเล</span>
+<span class="w-tag w-tag-blue">🏔 ภูเขา</span>
+<span class="w-tag w-tag-blue">📷 ถ่ายรูป</span>
+</div>
+</div>
+
+<!-- Reviews -->
+<div style="margin:12px 16px;background:#fff;border:1px solid var(--g200);border-radius:var(--r);padding:16px">
+<div style="display:flex;justify-content:space-between;margin-bottom:8px">
+<div style="font-weight:700;font-size:.85rem">รีวิว (12)</div>
+<div style="font-size:.8rem;color:var(--p)">ดูทั้งหมด</div>
+</div>
+<div style="border-top:1px solid var(--g100);padding-top:8px">
+<div style="display:flex;gap:8px;align-items:start">
+<div class="w-avatar-sm" style="font-size:.6rem;flex-shrink:0">🧑</div>
+<div>
+<div style="font-size:.8rem;font-weight:600">คุณเอก <span style="color:var(--accent)">★★★★★</span></div>
+<div style="font-size:.78rem;color:var(--g500)">พาเที่ยวสนุก วางแผนดีมาก!</div>
+</div>
+</div>
+</div>
+<div style="border-top:1px solid var(--g100);padding-top:8px;margin-top:8px">
+<div style="display:flex;gap:8px;align-items:start">
+<div class="w-avatar-sm" style="font-size:.6rem;flex-shrink:0">👤</div>
+<div>
+<div style="font-size:.8rem;font-weight:600">คุณสมชาย <span style="color:var(--accent)">★★★★☆</span></div>
+<div style="font-size:.78rem;color:var(--g500)">เพื่อนร่วมทริปดี พูดคุยง่าย</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Action buttons -->
+<div style="display:flex;gap:8px;padding:8px 16px">
+<div style="flex:1;background:var(--err-light);color:var(--err);padding:10px;border-radius:8px;text-align:center;font-size:.82rem;font-weight:600">🚫 บล็อก</div>
+<div style="flex:1;background:var(--g100);color:var(--g700);padding:10px;border-radius:8px;text-align:center;font-size:.82rem;font-weight:600">🚨 รายงาน</div>
+</div>
+
+</div>
+</div>
+<div class="phone-label">W13 — User Profile (Public)</div>
+<div class="phone-desc">Trust Passport + Reviews + Block/Report</div>
+</div>
+
+</div>
+
+<div class="ann">
+<strong>📋 Design Notes — Profile</strong>
+• My Profile: Trust Passport เป็น hero card — แสดง Trust Score, Stats, Badges<br>
+• Progressive Privacy: ผู้ใช้ตั้งค่าได้ว่าจะเปิดเผยอะไรบ้างในหน้า Privacy Settings<br>
+• Other User Profile: แสดงเฉพาะข้อมูลที่เจ้าของเปิดเผย + Trust Score ที่เห็นเสมอ<br>
+• Reviews: Double-blind (เห็นหลังทั้งสองฝ่ายรีวิวครบ)<br>
+• Safety: ปุ่ม Block / Report อยู่ด้านล่าง ชัดเจนแต่ไม่เด่นเกินไป
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 8. REVIEW & NOTIFICATIONS             -->
+<!-- ══════════════════════════════════════ -->
+<section id="s8">
+<div class="sh"><span class="sn">8</span><h2>W14–W15: Review & Notifications</h2></div>
+
+<div class="screen-row">
+
+<!-- W14 Write Review -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:#fff">
+<div class="w-header"><div class="back">←</div> รีวิวสมาชิก</div>
+
+<div style="padding:20px 16px;text-align:center">
+<div style="font-size:.85rem;color:var(--g500);margin-bottom:4px">ทริป: เชียงใหม่ 3D2N</div>
+<div style="font-size:.75rem;color:var(--g400)">📅 15–17 ส.ค. 2026</div>
+</div>
+
+<!-- Member to review -->
+<div style="text-align:center;padding:0 16px 16px">
+<div class="w-avatar-xl" style="margin:0 auto;font-size:2rem">👩</div>
+<div style="font-size:1.1rem;font-weight:700;margin-top:8px">คุณสมศรี</div>
+<div style="font-size:.8rem;color:var(--g500)">สมาชิก 1/2</div>
+</div>
+
+<!-- Star rating -->
+<div style="text-align:center;padding:16px">
+<div style="font-size:.85rem;font-weight:600;margin-bottom:8px">ให้คะแนน</div>
+<div style="font-size:2.5rem;letter-spacing:8px;cursor:pointer">★★★★☆</div>
+<div style="font-size:.8rem;color:var(--g500);margin-top:4px">4 / 5</div>
+</div>
+
+<!-- Quick tags -->
+<div style="padding:0 16px">
+<div style="font-size:.85rem;font-weight:600;margin-bottom:8px">ความรู้สึก</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<span class="w-tag w-tag-blue">👍 ร่วมทริปดี</span>
+<span class="w-tag w-tag-blue">🗣 พูดคุยง่าย</span>
+<span class="w-tag w-tag-gray">⏰ ตรงเวลา</span>
+<span class="w-tag w-tag-gray">🤝 ช่วยเหลือ</span>
+<span class="w-tag w-tag-gray">📷 ถ่ายรูปเก่ง</span>
+<span class="w-tag w-tag-gray">🧭 วางแพลนดี</span>
+</div>
+</div>
+
+<!-- Comment -->
+<div class="w-input-label">ความคิดเห็น (ไม่บังคับ)</div>
+<div class="w-input" style="min-height:80px">เล่าประสบการณ์ของคุณ...</div>
+
+<div style="padding:16px">
+<div class="w-btn w-btn-primary" style="margin:0">ส่งรีวิว</div>
+</div>
+
+<div style="padding:0 16px;text-align:center">
+<div style="background:var(--accent-light);padding:10px;border-radius:8px;font-size:.78rem;color:#92400e">🔒 รีวิวจะแสดงหลังทั้งสองฝ่ายรีวิวครบ (Double-Blind)</div>
+</div>
+
+<!-- Progress -->
+<div style="padding:16px;text-align:center">
+<div style="font-size:.78rem;color:var(--g400)">เหลืออีก 1 คนที่ต้องรีวิว</div>
+<div style="display:flex;gap:4px;justify-content:center;margin-top:8px">
+<div style="width:8px;height:8px;border-radius:50%;background:var(--p)"></div>
+<div style="width:8px;height:8px;border-radius:50%;background:var(--g200)"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="phone-label">W14 — Write Review</div>
+<div class="phone-desc">Star + Quick Tags + Double-Blind</div>
+</div>
+
+<!-- W15 Notifications -->
+<div>
+<div class="phone">
+<div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+<div class="phone-screen" style="min-height:640px;background:var(--g50)">
+<div class="w-header"><div class="back">←</div> การแจ้งเตือน <div class="spacer"></div><span style="font-size:.75rem;opacity:.7">อ่านทั้งหมด</span></div>
+
+<!-- Today -->
+<div style="padding:12px 16px 4px;font-size:.78rem;font-weight:600;color:var(--g500)">วันนี้</div>
+
+<div style="background:#fff">
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100);background:var(--p-bg)">
+<div style="width:36px;height:36px;background:var(--ok-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0">✓</div>
+<div style="flex:1">
+<div style="font-size:.85rem"><strong>คุณมาลี</strong> ได้รับอนุมัติเข้าร่วมทริป <strong>เชียงใหม่ 3D2N</strong></div>
+<div style="font-size:.72rem;color:var(--g400);margin-top:2px">2 ชั่วโมงที่แล้ว</div>
+</div>
+</div>
+
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100);background:var(--p-bg)">
+<div style="width:36px;height:36px;background:var(--accent-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0">🔔</div>
+<div style="flex:1">
+<div style="font-size:.85rem"><strong>คุณธนา</strong> ขอเข้าร่วมทริป <strong>เชียงใหม่ 3D2N</strong></div>
+<div style="font-size:.72rem;color:var(--g400);margin-top:2px">5 ชั่วโมงที่แล้ว</div>
+</div>
+</div>
+</div>
+
+<!-- Yesterday -->
+<div style="padding:12px 16px 4px;font-size:.78rem;font-weight:600;color:var(--g500)">เมื่อวาน</div>
+
+<div style="background:#fff">
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100)">
+<div style="width:36px;height:36px;background:var(--p-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0">💬</div>
+<div style="flex:1">
+<div style="font-size:.85rem"><strong>คุณสมศรี</strong> ส่งข้อความในแชท <strong>เชียงใหม่ 3D2N</strong></div>
+<div style="font-size:.72rem;color:var(--g400);margin-top:2px">เมื่อวาน 18:30</div>
+</div>
+</div>
+
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100)">
+<div style="width:36px;height:36px;background:var(--ok-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0">⭐</div>
+<div style="flex:1">
+<div style="font-size:.85rem"><strong>คุณเอก</strong> รีวิวคุณในทริป <strong>กาญจนบุรี</strong> — ★★★★★</div>
+<div style="font-size:.72rem;color:var(--g400);margin-top:2px">เมื่อวาน 14:15</div>
+</div>
+</div>
+
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100)">
+<div style="width:36px;height:36px;background:var(--err-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0">❌</div>
+<div style="flex:1">
+<div style="font-size:.85rem">คำขอเข้าร่วมทริป <strong>เกาะสมุย</strong> ถูกปฏิเสธ</div>
+<div style="font-size:.72rem;color:var(--g400);margin-top:2px">เมื่อวาน 10:00</div>
+</div>
+</div>
+</div>
+
+<!-- Older -->
+<div style="padding:12px 16px 4px;font-size:.78rem;font-weight:600;color:var(--g500)">ก่อนหน้า</div>
+
+<div style="background:#fff">
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100)">
+<div style="width:36px;height:36px;background:var(--g100);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0">🎉</div>
+<div style="flex:1">
+<div style="font-size:.85rem">ทริป <strong>กาญจนบุรี ล่องแพ</strong> เสร็จสมบูรณ์ อย่าลืมรีวิวเพื่อนร่วมทริป!</div>
+<div style="font-size:.72rem;color:var(--g400);margin-top:2px">3 วันก่อน</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="phone-label">W15 — Notifications</div>
+<div class="phone-desc">Grouped by date + Color-coded icons</div>
+</div>
+
+</div>
+
+<div class="ann">
+<strong>📋 Design Notes — Review & Notifications</strong>
+• Review: ระบบ Double-Blind — รีวิวจะแสดงหลังทั้งสองฝ่ายรีวิวเสร็จ ลด bias<br>
+• Quick Tags ให้เลือกง่าย — ส่งผลต่อ Trust Score ด้วย<br>
+• Review ทีละคน — แสดง progress dots ด้านล่าง<br>
+• Notifications: จัดกลุ่มตามวัน + สีไอคอนตามประเภท (เขียว=อนุมัติ, เหลือง=คำขอ, น้ำเงิน=แชท, แดง=ปฏิเสธ)<br>
+• Unread ไฮไลท์ด้วยพื้นหลังสีฟ้าอ่อน
+</div>
+</section>
+
+</main>
+
+<footer>
+Travel Buddy — Wireframe & UI Mockup v1.0 (Draft) — Surat Sritomya &copy; 2026
+</footer>
+
+</body>
+</html>
