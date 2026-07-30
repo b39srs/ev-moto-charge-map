@@ -34,12 +34,23 @@ export function HeroMotorcycleSelector({
     [router]
   )
 
-  // Build popular models from provided IDs, or fall back to first 6
+  // Build popular models from provided IDs, or pick one per brand (up to 6)
   const popularModels = popularModelIds
     ? popularModelIds
         .map((id) => models.find((m) => m.id === id))
         .filter((m): m is VehicleModelOption => m != null)
-    : models.slice(0, 6)
+    : (() => {
+        const seen = new Set<string>()
+        const result: VehicleModelOption[] = []
+        for (const m of models) {
+          if (!seen.has(m.brand)) {
+            seen.add(m.brand)
+            result.push(m)
+            if (result.length >= 6) break
+          }
+        }
+        return result
+      })()
 
   return (
     <div className="mx-auto w-full max-w-md space-y-4">
