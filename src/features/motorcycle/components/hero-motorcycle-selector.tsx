@@ -64,6 +64,7 @@ export function HeroMotorcycleSelector({
           onValueChange={handleSelect}
           placeholder="ค้นหารุ่นมอเตอร์ไซค์..."
           className="h-10 text-base"
+          allowSuggest
         />
       </div>
 

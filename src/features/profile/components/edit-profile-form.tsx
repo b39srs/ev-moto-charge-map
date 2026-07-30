@@ -74,6 +74,7 @@ export function EditProfileForm({ profile, vehicleModels }: EditProfileFormProps
           value={selectedModelId}
           onValueChange={setSelectedModelId}
           className="w-full"
+          allowSuggest
         />
       </FormField>
 

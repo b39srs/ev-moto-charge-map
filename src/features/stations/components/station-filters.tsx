@@ -93,6 +93,7 @@ export function StationFilters({
             onValueChange={handleVehicleChange}
             placeholder="ค้นหารุ่นมอเตอร์ไซค์..."
             className="max-w-sm"
+            allowSuggest
           />
         </div>
       )}

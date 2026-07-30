@@ -74,6 +74,7 @@ export function ReportForm({
           value={modelId}
           onValueChange={setModelId}
           className="w-full"
+          allowSuggest
         />
       </FormField>
 
