@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Buddy — Database Schema v1.0</title>
+<style>
+:root{--p:#1e40af;--p2:#2563eb;--p-light:#dbeafe;--p-bg:#eff6ff;--accent:#f59e0b;--accent-light:#fef3c7;--ok:#10b981;--ok-light:#d1fae5;--err:#ef4444;--err-light:#fee2e2;--purple:#7c3aed;--purple-light:#ede9fe;--teal:#0d9488;--teal-light:#ccfbf1;--g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g500:#6b7280;--g700:#374151;--g900:#111827;--r:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--g900);background:var(--g50);line-height:1.75;font-size:15px}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 40%,#2563eb 70%,#0ea5e9 100%);color:#fff;padding:72px 24px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero .doc-type{display:inline-block;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);padding:6px 20px;border-radius:999px;font-size:.8rem;margin-bottom:20px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
+.hero h1{font-size:3rem;font-weight:900;margin-bottom:8px;letter-spacing:-.5px}
+.hero .subtitle{font-size:1.2rem;opacity:.9;margin-bottom:12px;max-width:700px;margin-left:auto;margin-right:auto}
+.hero .tagline{font-size:1rem;font-style:italic;opacity:.65;margin-bottom:28px}
+.hero-meta{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;font-size:.85rem;opacity:.8}
+.hero-meta div{display:flex;align-items:center;gap:6px}
+.hero-stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.hero-stat{background:rgba(255,255,255,.1);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);border-radius:var(--r);padding:12px 24px;text-align:center}
+.hero-stat .val{font-size:1.4rem;font-weight:800}
+.hero-stat .lbl{font-size:.75rem;opacity:.7;margin-top:2px}
+
+/* Layout */
+.mx{max-width:1100px;margin:0 auto;padding:0 20px}
+
+/* TOC */
+.toc{background:#fff;border:1px solid var(--g200);border-radius:var(--r);padding:28px 32px;margin:-36px auto 44px;position:relative;z-index:2;box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.toc h2{font-size:.8rem;text-transform:uppercase;letter-spacing:2px;color:var(--g500);margin-bottom:16px;font-weight:700}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 32px}
+.toc a{color:var(--p2);text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:8px;padding:4px 0;transition:color .15s}
+.toc a:hover{color:var(--p);text-decoration:underline}
+.toc .num{background:var(--p-light);color:var(--p2);width:24px;height:24px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0}
+
+/* Section */
+section{margin-bottom:52px}
+.sh{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:14px;border-bottom:3px solid var(--p-light)}
+.sn{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;flex-shrink:0;box-shadow:0 2px 8px rgba(37,99,235,.3)}
+.sh h2{font-size:1.45rem;font-weight:800}
+p{margin-bottom:12px;color:var(--g700)}
+
+/* Cards */
+.card{background:#fff;border:1px solid var(--g200);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:box-shadow .2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.card h3{font-size:1.1rem;margin-bottom:10px;color:var(--g900)}
+.card h4{font-size:.95rem;margin:14px 0 6px;color:var(--g700);font-weight:700}
+.card-accent{border-left:4px solid var(--p2)}
+.card-purple{border-left:4px solid var(--purple)}
+.card-teal{border-left:4px solid var(--teal)}
+.card-gold{border-left:4px solid var(--accent)}
+.card-green{border-left:4px solid var(--ok)}
+
+/* Grid */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+
+/* Stats */
+.stat{background:#fff;border:1px solid var(--g200);border-radius:var(--r);padding:20px;text-align:center}
+.stat .v{font-size:1.8rem;font-weight:800;color:var(--p2)}
+.stat .l{font-size:.82rem;color:var(--g500);margin-top:4px}
+
+/* Tags */
+.tag{display:inline-block;padding:3px 12px;border-radius:999px;font-size:.78rem;font-weight:600;margin:2px 4px 2px 0}
+.t-blue{background:var(--p-light);color:var(--p)}
+.t-yellow{background:var(--accent-light);color:#92400e}
+.t-green{background:var(--ok-light);color:#065f46}
+.t-red{background:var(--err-light);color:#991b1b}
+.t-gray{background:var(--g100);color:var(--g700)}
+.t-purple{background:var(--purple-light);color:var(--purple)}
+.t-teal{background:var(--teal-light);color:var(--teal)}
+
+/* Callout */
+.co{border-left:4px solid var(--accent);background:var(--accent-light);padding:16px 20px;border-radius:0 var(--r) var(--r) 0;margin:16px 0}
+.co.blue{border-color:var(--p2);background:var(--p-bg)}
+.co.green{border-color:var(--ok);background:var(--ok-light)}
+.co.red{border-color:var(--err);background:var(--err-light)}
+.co.purple{border-color:var(--purple);background:var(--purple-light)}
+.co.teal{border-color:var(--teal);background:var(--teal-light)}
+.co strong{display:block;margin-bottom:4px}
+
+/* Lists */
+ul.bl{padding-left:20px}
+ul.bl li{margin-bottom:6px;color:var(--g700)}
+ul.ck{list-style:none;padding:0}
+ul.ck li{padding:6px 0 6px 28px;position:relative}
+ul.ck li::before{content:'\2713';position:absolute;left:0;color:var(--ok);font-weight:700}
+
+/* Schema Table */
+.schema{margin-bottom:28px;border-radius:var(--r);overflow:hidden;border:1px solid var(--g200);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.schema-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;color:#fff;font-weight:700;font-size:1rem}
+.schema-head .phase{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:999px}
+.schema-mvp .schema-head{background:linear-gradient(135deg,var(--p),var(--p2))}
+.schema-p2 .schema-head{background:linear-gradient(135deg,var(--purple),#9333ea)}
+.schema-p3 .schema-head{background:linear-gradient(135deg,var(--teal),#06b6d4)}
+.schema-trust .schema-head{background:linear-gradient(135deg,#dc2626,var(--err))}
+.schema-system .schema-head{background:linear-gradient(135deg,var(--g700),var(--g500))}
+
+.schema table{width:100%;border-collapse:collapse;font-size:.85rem;background:#fff;border:none;border-radius:0}
+.schema thead{background:var(--g100)}
+.schema th{text-align:left;padding:10px 16px;font-weight:700;color:var(--g700);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--g200)}
+.schema td{padding:9px 16px;border-top:1px solid var(--g200);color:var(--g700);font-size:.84rem}
+.schema tr:hover td{background:var(--g50)}
+.schema .col-name{font-weight:700;color:var(--g900);font-family:'Cascadia Code','Fira Code',monospace;font-size:.82rem}
+.schema .col-type{font-family:'Cascadia Code','Fira Code',monospace;font-size:.8rem;color:var(--p2)}
+.schema .pk{color:var(--accent);font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px}
+.schema .fk{color:var(--purple);font-size:.78rem}
+.schema .nullable{color:var(--g500);font-style:italic;font-size:.78rem}
+.schema .default-val{color:var(--teal);font-size:.78rem}
+.schema .constraint{font-size:.78rem;color:var(--g500);padding:6px 16px;background:var(--g50);border-top:1px solid var(--g200);font-style:italic}
+
+/* ER Diagram (text-based) */
+.er-box{background:var(--g900);color:#e2e8f0;padding:24px;border-radius:var(--r);font-family:'Cascadia Code','Fira Code',monospace;font-size:.82rem;line-height:1.9;overflow-x:auto;white-space:pre;margin:16px 0}
+
+/* Flow */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:16px 0}
+.fs{background:var(--p-light);color:var(--p);padding:10px 20px;border-radius:10px;font-weight:600;font-size:.88rem;white-space:nowrap;border:1px solid rgba(37,99,235,.15)}
+.fa{color:var(--g300);font-size:1.3rem}
+
+/* Summary table */
+table.summary{width:100%;border-collapse:collapse;font-size:.88rem;background:#fff;border-radius:var(--r);overflow:hidden;border:1px solid var(--g200)}
+table.summary thead{background:var(--g100)}
+table.summary th{text-align:left;padding:12px 14px;font-weight:700;color:var(--g700);font-size:.82rem;text-transform:uppercase;letter-spacing:.5px}
+table.summary td{padding:12px 14px;border-top:1px solid var(--g200);color:var(--g700)}
+table.summary tr:hover td{background:var(--g50)}
+
+footer{text-align:center;padding:36px 20px;color:var(--g500);font-size:.82rem;border-top:1px solid var(--g200);margin-top:48px;background:#fff}
+
+@media(max-width:768px){
+.hero h1{font-size:2rem}
+.toc-grid{grid-template-columns:1fr}
+.g2,.g3,.g4{grid-template-columns:1fr}
+.hero-stats{flex-direction:column;align-items:center}
+.er-box{font-size:.7rem}
+}
+@media print{
+body{background:#fff;font-size:13px}
+.hero{background:var(--p)!important;print-color-adjust:exact;-webkit-print-color-adjust:exact;padding:40px 20px}
+section{break-inside:avoid}
+.card,.schema{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+<span class="doc-type">Database Schema Document v1.0</span>
+<h1>Travel Buddy</h1>
+<p class="subtitle">Database Schema ฉบับสมบูรณ์ — ออกแบบจาก PRD v0.1 + BRD v1.0</p>
+<p class="tagline">Supabase (PostgreSQL + PostGIS + Auth + Storage + Realtime)</p>
+<div class="hero-meta">
+<div>Author: Surat Sritomya</div>
+<div>Date: July 2026</div>
+<div>Status: Draft</div>
+</div>
+<div class="hero-stats">
+<div class="hero-stat"><div class="val">18</div><div class="lbl">Tables</div></div>
+<div class="hero-stat"><div class="val">3</div><div class="lbl">Phases Covered</div></div>
+<div class="hero-stat"><div class="val">Supabase</div><div class="lbl">Platform</div></div>
+<div class="hero-stat"><div class="val">PostGIS</div><div class="lbl">Geo Support</div></div>
+</div>
+</header>
+
+<!-- TOC -->
+<nav class="toc mx">
+<h2>สารบัญ — Database Schema</h2>
+<div class="toc-grid">
+<a href="#s1"><span class="num">1</span>Overview &amp; Design Principles</a>
+<a href="#s2"><span class="num">2</span>ER Diagram (Text)</a>
+<a href="#s3"><span class="num">3</span>MVP — Core Tables (8 tables)</a>
+<a href="#s4"><span class="num">4</span>Trust &amp; Safety Tables (4 tables)</a>
+<a href="#s5"><span class="num">5</span>Phase 2 — Expense Sharing (2 tables)</a>
+<a href="#s6"><span class="num">6</span>Phase 3 — Escrow Payment (1 table)</a>
+<a href="#s7"><span class="num">7</span>System Tables (3 tables)</a>
+<a href="#s8"><span class="num">8</span>Indexes &amp; RLS Summary</a>
+</div>
+</nav>
+
+<main class="mx">
+
+<!-- ══════════════════════════════════════ -->
+<!-- 1. OVERVIEW                           -->
+<!-- ══════════════════════════════════════ -->
+<section id="s1">
+<div class="sh"><span class="sn">1</span><h2>Overview &amp; Design Principles</h2></div>
+
+<div class="g2">
+<div class="card card-accent">
+<h3>Tech Stack</h3>
+<ul class="bl">
+<li><strong>Database:</strong> Supabase (PostgreSQL 15+)</li>
+<li><strong>Geo:</strong> PostGIS extension สำหรับ lat/lng</li>
+<li><strong>Auth:</strong> Supabase Auth (Google OAuth, Email, OTP)</li>
+<li><strong>Storage:</strong> Supabase Storage (avatars, images, documents)</li>
+<li><strong>Realtime:</strong> Supabase Realtime (chat, notifications)</li>
+<li><strong>Primary Key:</strong> UUID (gen_random_uuid())</li>
+<li><strong>Timestamps:</strong> timestamptz (UTC)</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h3>Design Principles</h3>
+<ul class="bl">
+<li><strong>Privacy-First:</strong> ข้อมูลส่วนตัวแยกจาก public data, Progressive Privacy Control ผ่าน trip_member_privacy</li>
+<li><strong>Phase-Ready:</strong> MVP tables พร้อมใช้, Phase 2-3 เพิ่มได้ไม่ต้อง migrate</li>
+<li><strong>RLS:</strong> ทุกตารางใช้ Row-Level Security ควบคุม access</li>
+<li><strong>Denormalization:</strong> เฉพาะ counter fields (member_count, trust_score) เพื่อ performance</li>
+<li><strong>Soft Delete:</strong> ใช้ status field แทนการลบ (trips, members)</li>
+</ul>
+</div>
+</div>
+
+<div class="card" style="margin-top:8px">
+<h3>Table Summary by Phase</h3>
+<table class="summary">
+<thead><tr><th>Phase</th><th>Tables</th><th>จำนวน</th><th>สถานะ</th></tr></thead>
+<tbody>
+<tr><td><span class="tag t-blue">MVP</span></td><td>profiles, trips, trip_tags, trip_members, trip_member_privacy, messages, reviews, favorites</td><td>8</td><td>Build First</td></tr>
+<tr><td><span class="tag t-red">Trust</span></td><td>verifications, badges, user_badges, reports</td><td>4</td><td>Build with MVP</td></tr>
+<tr><td><span class="tag t-purple">Phase 2</span></td><td>expenses, expense_splits</td><td>2</td><td>After MVP</td></tr>
+<tr><td><span class="tag t-teal">Phase 3</span></td><td>escrow_transactions</td><td>1</td><td>After Phase 2</td></tr>
+<tr><td><span class="tag t-gray">System</span></td><td>notifications, subscriptions, blocks</td><td>3</td><td>Build with MVP</td></tr>
+<tr style="background:var(--p-bg)"><td><strong>Total</strong></td><td></td><td><strong>18</strong></td><td></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 2. ER DIAGRAM                         -->
+<!-- ══════════════════════════════════════ -->
+<section id="s2">
+<div class="sh"><span class="sn">2</span><h2>Entity Relationship Diagram</h2></div>
+
+<div class="card">
+<h3>Relationships Overview</h3>
+<div class="er-box">
+auth.users ─1:1─ profiles
+                    │
+     ┌──────────────┼──────────────────────────────────┐
+     │              │                                  │
+  favorites      trips ─1:N─ trip_tags              blocks
+     │              │                                  │
+     │     ┌────────┼────────┐                    notifications
+     │     │        │        │                    subscriptions
+     │  trip_members │    messages
+     │     │        │
+     │  trip_member_privacy  │
+     │              │        │
+     │           reviews  expenses ──── expense_splits
+     │              │
+     │        escrow_transactions
+     │
+  verifications ── badges ── user_badges
+                      │
+                   reports</div>
+</div>
+
+<div class="co blue">
+<strong>Key Relationships</strong>
+<ul class="bl" style="margin-top:8px">
+<li><strong>profiles</strong> 1:N trips (as host), 1:N trip_members, 1:N reviews, 1:N messages</li>
+<li><strong>trips</strong> 1:N trip_members, 1:N messages, 1:N reviews, 1:N expenses, 1:N escrow_transactions</li>
+<li><strong>trip_members</strong> 1:1 trip_member_privacy (per user per trip)</li>
+<li><strong>expenses</strong> 1:N expense_splits</li>
+<li><strong>profiles</strong> 1:N verifications, N:M badges (via user_badges)</li>
+</ul>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 3. MVP TABLES                         -->
+<!-- ══════════════════════════════════════ -->
+<section id="s3">
+<div class="sh"><span class="sn">3</span><h2>MVP — Core Tables</h2></div>
+
+<!-- 3.1 profiles -->
+<div class="schema schema-mvp">
+<div class="schema-head">
+<span>profiles</span>
+<span class="phase">MVP</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK, FK</span></td><td>FK → auth.users(id) ON DELETE CASCADE</td></tr>
+<tr><td class="col-name">display_name</td><td class="col-type">text</td><td>NOT NULL</td><td>ชื่อเล่น / Display Name (เปิดเผยเสมอ)</td></tr>
+<tr><td class="col-name">full_name</td><td class="col-type">text</td><td></td><td>ชื่อ-นามสกุลจริง (ซ่อนตาม Privacy Control)</td></tr>
+<tr><td class="col-name">avatar_url</td><td class="col-type">text</td><td></td><td>URL รูปโปรไฟล์ (Supabase Storage)</td></tr>
+<tr><td class="col-name">bio</td><td class="col-type">text</td><td></td><td>แนะนำตัว (max 500 chars)</td></tr>
+<tr><td class="col-name">province</td><td class="col-type">text</td><td></td><td>จังหวัดที่อยู่</td></tr>
+<tr><td class="col-name">date_of_birth</td><td class="col-type">date</td><td></td><td>วันเกิด (ใช้คำนวณอายุ + Anonymous age range)</td></tr>
+<tr><td class="col-name">gender</td><td class="col-type">text</td><td></td><td>male / female / other / prefer_not_to_say</td></tr>
+<tr><td class="col-name">languages</td><td class="col-type">text[]</td><td></td><td>ภาษาที่ใช้ได้ เช่น {'th','en','jp'}</td></tr>
+<tr><td class="col-name">interests</td><td class="col-type">text[]</td><td></td><td>ความสนใจ เช่น {'nature','beach','food','culture'}</td></tr>
+<tr><td class="col-name">travel_style</td><td class="col-type">text</td><td></td><td>backpack / comfort / luxury</td></tr>
+<tr><td class="col-name">phone</td><td class="col-type">text</td><td></td><td>เบอร์โทร (ซ่อนตาม Privacy Control)</td></tr>
+<tr><td class="col-name">line_id</td><td class="col-type">text</td><td></td><td>LINE ID (ซ่อนตาม Privacy Control)</td></tr>
+<tr><td class="col-name">social_links</td><td class="col-type">jsonb</td><td><span class="default-val">DEFAULT '{}'</span></td><td>{"ig":"...", "fb":"...", "x":"..."}</td></tr>
+<tr><td class="col-name">verification_level</td><td class="col-type">smallint</td><td><span class="default-val">DEFAULT 0</span></td><td>0=Email, 1=Phone, 2=Gov ID, 3=Selfie Verified</td></tr>
+<tr><td class="col-name">trust_score</td><td class="col-type">smallint</td><td><span class="default-val">DEFAULT 0</span></td><td>0-100, คำนวณจาก trips + reviews + cancel rate + verification</td></tr>
+<tr><td class="col-name">average_rating</td><td class="col-type">numeric(2,1)</td><td><span class="default-val">DEFAULT 0</span></td><td>1.0-5.0 คะแนนเฉลี่ยจาก reviews</td></tr>
+<tr><td class="col-name">total_trips_joined</td><td class="col-type">integer</td><td><span class="default-val">DEFAULT 0</span></td><td>จำนวนทริปที่เข้าร่วม (completed)</td></tr>
+<tr><td class="col-name">total_trips_hosted</td><td class="col-type">integer</td><td><span class="default-val">DEFAULT 0</span></td><td>จำนวนทริปที่เป็น Host (completed)</td></tr>
+<tr><td class="col-name">cancellation_count</td><td class="col-type">integer</td><td><span class="default-val">DEFAULT 0</span></td><td>จำนวนครั้งที่ยกเลิก</td></tr>
+<tr><td class="col-name">emergency_contact_name</td><td class="col-type">text</td><td></td><td>ชื่อผู้ติดต่อฉุกเฉิน</td></tr>
+<tr><td class="col-name">emergency_contact_phone</td><td class="col-type">text</td><td></td><td>เบอร์ผู้ติดต่อฉุกเฉิน</td></tr>
+<tr><td class="col-name">is_premium</td><td class="col-type">boolean</td><td><span class="default-val">DEFAULT false</span></td><td>สถานะสมาชิก Premium</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+<tr><td class="col-name">updated_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">CHECK (gender IN ('male','female','other','prefer_not_to_say')) &bull; CHECK (travel_style IN ('backpack','comfort','luxury')) &bull; CHECK (verification_level BETWEEN 0 AND 3) &bull; CHECK (trust_score BETWEEN 0 AND 100)</div>
+</div>
+
+<!-- 3.2 trips -->
+<div class="schema schema-mvp">
+<div class="schema-head">
+<span>trips</span>
+<span class="phase">MVP</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">host_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>ผู้สร้างทริป</td></tr>
+<tr><td class="col-name">title</td><td class="col-type">text</td><td>NOT NULL</td><td>ชื่อทริป</td></tr>
+<tr><td class="col-name">description</td><td class="col-type">text</td><td></td><td>รายละเอียดทริป</td></tr>
+<tr><td class="col-name">destination</td><td class="col-type">text</td><td>NOT NULL</td><td>ชื่อสถานที่ปลายทาง</td></tr>
+<tr><td class="col-name">destination_province</td><td class="col-type">text</td><td></td><td>จังหวัด (สำหรับ filter)</td></tr>
+<tr><td class="col-name">destination_country</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'TH'</span></td><td>ISO country code</td></tr>
+<tr><td class="col-name">latitude</td><td class="col-type">double precision</td><td></td><td>พิกัดละติจูด</td></tr>
+<tr><td class="col-name">longitude</td><td class="col-type">double precision</td><td></td><td>พิกัดลองจิจูด</td></tr>
+<tr><td class="col-name">start_date</td><td class="col-type">date</td><td>NOT NULL</td><td>วันเริ่มทริป</td></tr>
+<tr><td class="col-name">end_date</td><td class="col-type">date</td><td>NOT NULL</td><td>วันจบทริป</td></tr>
+<tr><td class="col-name">max_members</td><td class="col-type">smallint</td><td>NOT NULL</td><td>จำนวนสมาชิกสูงสุด (รวม host)</td></tr>
+<tr><td class="col-name">member_count</td><td class="col-type">smallint</td><td><span class="default-val">DEFAULT 1</span></td><td>จำนวนสมาชิกปัจจุบัน (denormalized, รวม host)</td></tr>
+<tr><td class="col-name">budget_min</td><td class="col-type">integer</td><td></td><td>งบขั้นต่ำ (บาท/คน)</td></tr>
+<tr><td class="col-name">budget_max</td><td class="col-type">integer</td><td></td><td>งบสูงสุด (บาท/คน)</td></tr>
+<tr><td class="col-name">trip_type</td><td class="col-type">text</td><td></td><td>nature / beach / mountain / culture / food / adventure / road_trip / island</td></tr>
+<tr><td class="col-name">status</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'draft'</span></td><td>draft / published / full / in_progress / completed / cancelled</td></tr>
+<tr><td class="col-name">cover_image_url</td><td class="col-type">text</td><td></td><td>ภาพปกทริป</td></tr>
+<tr><td class="col-name">images</td><td class="col-type">text[]</td><td><span class="default-val">DEFAULT '{}'</span></td><td>รูปเพิ่มเติม (max 10)</td></tr>
+<tr><td class="col-name">cancellation_policy</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'moderate'</span></td><td>flexible / moderate / strict</td></tr>
+<tr><td class="col-name">required_verification_level</td><td class="col-type">smallint</td><td><span class="default-val">DEFAULT 1</span></td><td>ระดับ verify ขั้นต่ำที่ต้องการ (0-3)</td></tr>
+<tr><td class="col-name">preferred_gender</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'any'</span></td><td>male / female / any — Host กำหนดเพศที่ต้องการ</td></tr>
+<tr><td class="col-name">preferred_age_min</td><td class="col-type">smallint</td><td></td><td>อายุขั้นต่ำที่ต้องการ</td></tr>
+<tr><td class="col-name">preferred_age_max</td><td class="col-type">smallint</td><td></td><td>อายุสูงสุดที่ต้องการ</td></tr>
+<tr><td class="col-name">preferred_languages</td><td class="col-type">text[]</td><td></td><td>ภาษาที่ต้องการ</td></tr>
+<tr><td class="col-name">is_featured</td><td class="col-type">boolean</td><td><span class="default-val">DEFAULT false</span></td><td>ทริปแนะนำ (จ่ายเพื่อขึ้นหน้าแรก)</td></tr>
+<tr><td class="col-name">featured_until</td><td class="col-type">timestamptz</td><td></td><td>แสดง featured จนถึงวันที่</td></tr>
+<tr><td class="col-name">view_count</td><td class="col-type">integer</td><td><span class="default-val">DEFAULT 0</span></td><td>จำนวนครั้งที่ถูกเข้าดู</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+<tr><td class="col-name">updated_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">CHECK (end_date >= start_date) &bull; CHECK (max_members >= 2) &bull; CHECK (member_count >= 0 AND member_count <= max_members) &bull; CHECK (status IN ('draft','published','full','in_progress','completed','cancelled')) &bull; CHECK (cancellation_policy IN ('flexible','moderate','strict'))</div>
+</div>
+
+<!-- 3.3 trip_tags -->
+<div class="schema schema-mvp">
+<div class="schema-head">
+<span>trip_tags</span>
+<span class="phase">MVP</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">trip_id</td><td class="col-type">uuid</td><td><span class="fk">FK → trips</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">tag</td><td class="col-type">text</td><td>NOT NULL</td><td>เช่น 'diving', 'camping', 'temple', 'nightlife'</td></tr>
+</tbody>
+</table>
+<div class="constraint">UNIQUE (trip_id, tag)</div>
+</div>
+
+<!-- 3.4 trip_members -->
+<div class="schema schema-mvp">
+<div class="schema-head">
+<span>trip_members</span>
+<span class="phase">MVP</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">trip_id</td><td class="col-type">uuid</td><td><span class="fk">FK → trips</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">user_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">role</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'member'</span></td><td>host / member</td></tr>
+<tr><td class="col-name">status</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'pending'</span></td><td>pending / approved / rejected / cancelled / left</td></tr>
+<tr><td class="col-name">message</td><td class="col-type">text</td><td></td><td>ข้อความจากผู้ขอ Join (แนะนำตัว)</td></tr>
+<tr><td class="col-name">applied_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td>วันที่สมัคร</td></tr>
+<tr><td class="col-name">responded_at</td><td class="col-type">timestamptz</td><td></td><td>วันที่ Host ตอบ</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">UNIQUE (trip_id, user_id) &bull; CHECK (role IN ('host','member')) &bull; CHECK (status IN ('pending','approved','rejected','cancelled','left'))</div>
+</div>
+
+<!-- 3.5 trip_member_privacy -->
+<div class="schema schema-mvp">
+<div class="schema-head">
+<span>trip_member_privacy</span>
+<span class="phase">MVP — Progressive Privacy Control</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">trip_id</td><td class="col-type">uuid</td><td><span class="fk">FK → trips</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">user_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">show_avatar</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'blur'</span></td><td>open / blur / hidden</td></tr>
+<tr><td class="col-name">show_real_name</td><td class="col-type">boolean</td><td><span class="default-val">DEFAULT false</span></td><td>แสดงชื่อจริง?</td></tr>
+<tr><td class="col-name">show_age</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'range'</span></td><td>exact / range / hidden</td></tr>
+<tr><td class="col-name">show_phone</td><td class="col-type">boolean</td><td><span class="default-val">DEFAULT false</span></td><td>แสดงเบอร์โทร?</td></tr>
+<tr><td class="col-name">show_line_id</td><td class="col-type">boolean</td><td><span class="default-val">DEFAULT false</span></td><td>แสดง LINE ID?</td></tr>
+<tr><td class="col-name">show_social_media</td><td class="col-type">boolean</td><td><span class="default-val">DEFAULT false</span></td><td>แสดง Social Media?</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+<tr><td class="col-name">updated_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">UNIQUE (trip_id, user_id) &bull; CHECK (show_avatar IN ('open','blur','hidden')) &bull; CHECK (show_age IN ('exact','range','hidden'))</div>
+</div>
+
+<div class="co purple">
+<strong>Privacy-First Design Notes</strong>
+<ul class="bl" style="margin-top:8px">
+<li><strong>ก่อน Join:</strong> ผู้ใช้เห็นเฉพาะ display_name, trust_score, average_rating, total_trips_joined, verification_level, badges จาก profiles (ไม่เห็น full_name, avatar, phone, line_id, social_links)</li>
+<li><strong>หลัง Join (Approved):</strong> ผู้ใช้ตั้งค่า trip_member_privacy เพื่อเลือกเปิดเผยข้อมูลทีละขั้น</li>
+<li><strong>RLS Policy:</strong> ข้อมูลส่วนตัว (full_name, phone ฯลฯ) จะ return เฉพาะเมื่อ trip_member_privacy อนุญาต</li>
+</ul>
+</div>
+
+<!-- 3.6 messages -->
+<div class="schema schema-mvp">
+<div class="schema-head">
+<span>messages</span>
+<span class="phase">MVP — Trip Group Chat</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">trip_id</td><td class="col-type">uuid</td><td><span class="fk">FK → trips</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">sender_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span></td><td>null สำหรับ system messages</td></tr>
+<tr><td class="col-name">content</td><td class="col-type">text</td><td></td><td>เนื้อหาข้อความ</td></tr>
+<tr><td class="col-name">message_type</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'text'</span></td><td>text / image / location / system</td></tr>
+<tr><td class="col-name">image_url</td><td class="col-type">text</td><td></td><td>URL รูป (เมื่อ type = image)</td></tr>
+<tr><td class="col-name">latitude</td><td class="col-type">double precision</td><td></td><td>พิกัด (เมื่อ type = location)</td></tr>
+<tr><td class="col-name">longitude</td><td class="col-type">double precision</td><td></td><td>พิกัด (เมื่อ type = location)</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">CHECK (message_type IN ('text','image','location','system')) &bull; Supabase Realtime enabled on this table</div>
+</div>
+
+<!-- 3.7 reviews -->
+<div class="schema schema-mvp">
+<div class="schema-head">
+<span>reviews</span>
+<span class="phase">MVP</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">trip_id</td><td class="col-type">uuid</td><td><span class="fk">FK → trips</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">reviewer_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>ผู้ให้รีวิว</td></tr>
+<tr><td class="col-name">reviewee_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>ผู้ถูกรีวิว (Host ↔ Member)</td></tr>
+<tr><td class="col-name">rating</td><td class="col-type">smallint</td><td>NOT NULL</td><td>1-5 ดาว</td></tr>
+<tr><td class="col-name">comment</td><td class="col-type">text</td><td></td><td>ความเห็น</td></tr>
+<tr><td class="col-name">is_visible</td><td class="col-type">boolean</td><td><span class="default-val">DEFAULT false</span></td><td>true เมื่อทั้งสองฝ่ายให้รีวิวแล้ว (Double-Blind)</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">UNIQUE (trip_id, reviewer_id, reviewee_id) &bull; CHECK (rating BETWEEN 1 AND 5) &bull; CHECK (reviewer_id != reviewee_id)</div>
+</div>
+
+<!-- 3.8 favorites -->
+<div class="schema schema-mvp">
+<div class="schema-head">
+<span>favorites</span>
+<span class="phase">MVP</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">user_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">trip_id</td><td class="col-type">uuid</td><td><span class="fk">FK → trips</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">UNIQUE (user_id, trip_id)</div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 4. TRUST & SAFETY                     -->
+<!-- ══════════════════════════════════════ -->
+<section id="s4">
+<div class="sh"><span class="sn">4</span><h2>Trust &amp; Safety Tables</h2></div>
+
+<!-- 4.1 verifications -->
+<div class="schema schema-trust">
+<div class="schema-head">
+<span>verifications</span>
+<span class="phase">Trust — KYC</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">user_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">level</td><td class="col-type">smallint</td><td>NOT NULL</td><td>0=Email, 1=Phone, 2=Gov ID, 3=Selfie</td></tr>
+<tr><td class="col-name">method</td><td class="col-type">text</td><td>NOT NULL</td><td>email / phone_otp / government_id / selfie_liveness</td></tr>
+<tr><td class="col-name">status</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'pending'</span></td><td>pending / approved / rejected</td></tr>
+<tr><td class="col-name">document_url</td><td class="col-type">text</td><td></td><td>URL เอกสาร (encrypted storage, Level 2-3 only)</td></tr>
+<tr><td class="col-name">rejection_reason</td><td class="col-type">text</td><td></td><td>เหตุผลที่ไม่ผ่าน</td></tr>
+<tr><td class="col-name">verified_at</td><td class="col-type">timestamptz</td><td></td><td>วันที่ผ่านการยืนยัน</td></tr>
+<tr><td class="col-name">expires_at</td><td class="col-type">timestamptz</td><td></td><td>วันหมดอายุ (Gov ID อาจต้อง re-verify)</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">CHECK (level BETWEEN 0 AND 3) &bull; CHECK (status IN ('pending','approved','rejected')) &bull; CHECK (method IN ('email','phone_otp','government_id','selfie_liveness'))</div>
+</div>
+
+<!-- 4.2 badges -->
+<div class="schema schema-trust">
+<div class="schema-head">
+<span>badges</span>
+<span class="phase">Trust — Badges</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">slug</td><td class="col-type">text</td><td>UNIQUE, NOT NULL</td><td>เช่น 'top_host', '100_trips', 'super_traveler', 'female_verified'</td></tr>
+<tr><td class="col-name">name</td><td class="col-type">text</td><td>NOT NULL</td><td>ชื่อแสดง เช่น 'Top Host'</td></tr>
+<tr><td class="col-name">description</td><td class="col-type">text</td><td></td><td>คำอธิบาย badge</td></tr>
+<tr><td class="col-name">icon_url</td><td class="col-type">text</td><td></td><td>URL icon ของ badge</td></tr>
+<tr><td class="col-name">criteria</td><td class="col-type">jsonb</td><td></td><td>เงื่อนไขการได้ badge เช่น {"min_trips_hosted": 10, "min_rating": 4.5}</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- 4.3 user_badges -->
+<div class="schema schema-trust">
+<div class="schema-head">
+<span>user_badges</span>
+<span class="phase">Trust</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">user_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">badge_id</td><td class="col-type">uuid</td><td><span class="fk">FK → badges</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">awarded_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">UNIQUE (user_id, badge_id)</div>
+</div>
+
+<!-- 4.4 reports -->
+<div class="schema schema-trust">
+<div class="schema-head">
+<span>reports</span>
+<span class="phase">Trust — Safety</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">reporter_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>ผู้รายงาน</td></tr>
+<tr><td class="col-name">reported_user_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>ผู้ถูกรายงาน</td></tr>
+<tr><td class="col-name">trip_id</td><td class="col-type">uuid</td><td><span class="fk">FK → trips</span></td><td>ทริปที่เกี่ยวข้อง (optional)</td></tr>
+<tr><td class="col-name">reason</td><td class="col-type">text</td><td>NOT NULL</td><td>harassment / fraud / spam / safety / inappropriate / other</td></tr>
+<tr><td class="col-name">description</td><td class="col-type">text</td><td></td><td>รายละเอียดเพิ่มเติม</td></tr>
+<tr><td class="col-name">evidence_urls</td><td class="col-type">text[]</td><td><span class="default-val">DEFAULT '{}'</span></td><td>URL หลักฐาน (screenshots)</td></tr>
+<tr><td class="col-name">status</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'pending'</span></td><td>pending / reviewing / resolved / dismissed</td></tr>
+<tr><td class="col-name">admin_notes</td><td class="col-type">text</td><td></td><td>หมายเหตุจาก Admin</td></tr>
+<tr><td class="col-name">resolved_at</td><td class="col-type">timestamptz</td><td></td><td></td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">CHECK (reason IN ('harassment','fraud','spam','safety','inappropriate','other')) &bull; CHECK (status IN ('pending','reviewing','resolved','dismissed')) &bull; CHECK (reporter_id != reported_user_id)</div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 5. PHASE 2 — EXPENSE SHARING          -->
+<!-- ══════════════════════════════════════ -->
+<section id="s5">
+<div class="sh"><span class="sn">5</span><h2>Phase 2 — Expense Sharing</h2></div>
+
+<div class="co purple">
+<strong>Phase 2</strong>
+สร้างหลังจาก MVP เสถียร — เพิ่มระบบบันทึกค่าใช้จ่ายและแบ่งจ่าย (Equal / Custom / Percentage)
+</div>
+
+<!-- 5.1 expenses -->
+<div class="schema schema-p2">
+<div class="schema-head">
+<span>expenses</span>
+<span class="phase">Phase 2</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">trip_id</td><td class="col-type">uuid</td><td><span class="fk">FK → trips</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">paid_by</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>คนที่จ่ายเงินไปก่อน</td></tr>
+<tr><td class="col-name">title</td><td class="col-type">text</td><td>NOT NULL</td><td>รายการ เช่น 'ค่าน้ำมัน', 'ค่าอาหารเย็น'</td></tr>
+<tr><td class="col-name">amount</td><td class="col-type">numeric(10,2)</td><td>NOT NULL</td><td>จำนวนเงิน (บาท)</td></tr>
+<tr><td class="col-name">category</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'other'</span></td><td>transport / food / accommodation / activity / ticket / other</td></tr>
+<tr><td class="col-name">split_type</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'equal'</span></td><td>equal / custom / percentage</td></tr>
+<tr><td class="col-name">receipt_url</td><td class="col-type">text</td><td></td><td>URL ใบเสร็จ (optional)</td></tr>
+<tr><td class="col-name">note</td><td class="col-type">text</td><td></td><td>หมายเหตุ</td></tr>
+<tr><td class="col-name">expense_date</td><td class="col-type">date</td><td><span class="default-val">DEFAULT CURRENT_DATE</span></td><td>วันที่จ่าย</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">CHECK (amount > 0) &bull; CHECK (split_type IN ('equal','custom','percentage')) &bull; CHECK (category IN ('transport','food','accommodation','activity','ticket','other'))</div>
+</div>
+
+<!-- 5.2 expense_splits -->
+<div class="schema schema-p2">
+<div class="schema-head">
+<span>expense_splits</span>
+<span class="phase">Phase 2</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">expense_id</td><td class="col-type">uuid</td><td><span class="fk">FK → expenses</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">user_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>คนที่ต้องจ่าย</td></tr>
+<tr><td class="col-name">amount</td><td class="col-type">numeric(10,2)</td><td>NOT NULL</td><td>จำนวนเงินที่ต้องจ่าย</td></tr>
+<tr><td class="col-name">percentage</td><td class="col-type">numeric(5,2)</td><td></td><td>% (เมื่อ split_type = percentage)</td></tr>
+<tr><td class="col-name">is_settled</td><td class="col-type">boolean</td><td><span class="default-val">DEFAULT false</span></td><td>จ่ายแล้วหรือยัง</td></tr>
+<tr><td class="col-name">settled_at</td><td class="col-type">timestamptz</td><td></td><td>วันที่จ่าย</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">UNIQUE (expense_id, user_id) &bull; CHECK (amount >= 0)</div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 6. PHASE 3 — ESCROW                   -->
+<!-- ══════════════════════════════════════ -->
+<section id="s6">
+<div class="sh"><span class="sn">6</span><h2>Phase 3 — Escrow Payment</h2></div>
+
+<div class="co teal">
+<strong>Phase 3</strong>
+ระบบ Escrow ถือเงินจนทริปสำเร็จ — ใช้ Payment Partner (2C2P / Omise) ที่มี License &bull; รองรับ PromptPay + Credit Card &bull; Platform Fee 3%
+</div>
+
+<!-- 6.1 escrow_transactions -->
+<div class="schema schema-p3">
+<div class="schema-head">
+<span>escrow_transactions</span>
+<span class="phase">Phase 3</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">trip_id</td><td class="col-type">uuid</td><td><span class="fk">FK → trips</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">payer_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>ผู้ชำระเงิน</td></tr>
+<tr><td class="col-name">payee_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>ผู้รับเงิน (Host)</td></tr>
+<tr><td class="col-name">amount</td><td class="col-type">numeric(10,2)</td><td>NOT NULL</td><td>จำนวนเงินที่ชำระ</td></tr>
+<tr><td class="col-name">platform_fee</td><td class="col-type">numeric(10,2)</td><td>NOT NULL</td><td>ค่าธรรมเนียม 3%</td></tr>
+<tr><td class="col-name">net_amount</td><td class="col-type">numeric(10,2)</td><td>NOT NULL</td><td>จำนวนสุทธิที่ Host ได้รับ (amount - platform_fee)</td></tr>
+<tr><td class="col-name">currency</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'THB'</span></td><td>ISO currency code</td></tr>
+<tr><td class="col-name">payment_method</td><td class="col-type">text</td><td>NOT NULL</td><td>promptpay / credit_card / bank_transfer</td></tr>
+<tr><td class="col-name">payment_reference</td><td class="col-type">text</td><td></td><td>Reference จาก Payment Gateway</td></tr>
+<tr><td class="col-name">status</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'pending'</span></td><td>pending / held / released / refunded / disputed</td></tr>
+<tr><td class="col-name">held_at</td><td class="col-type">timestamptz</td><td></td><td>วันที่เงินเข้า Escrow</td></tr>
+<tr><td class="col-name">released_at</td><td class="col-type">timestamptz</td><td></td><td>วันที่ปล่อยเงินให้ Host</td></tr>
+<tr><td class="col-name">refunded_at</td><td class="col-type">timestamptz</td><td></td><td>วันที่ Refund</td></tr>
+<tr><td class="col-name">refund_amount</td><td class="col-type">numeric(10,2)</td><td></td><td>จำนวนเงินที่คืน (ตาม Cancellation Policy)</td></tr>
+<tr><td class="col-name">dispute_reason</td><td class="col-type">text</td><td></td><td>เหตุผลที่ Dispute</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+<tr><td class="col-name">updated_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">CHECK (amount > 0) &bull; CHECK (platform_fee >= 0) &bull; CHECK (status IN ('pending','held','released','refunded','disputed')) &bull; CHECK (payment_method IN ('promptpay','credit_card','bank_transfer'))</div>
+</div>
+
+<div class="card" style="margin-top:12px">
+<h3>Escrow Flow</h3>
+<div class="flow" style="justify-content:center">
+<span class="fs">pending</span>
+<span class="fa">&rarr;</span>
+<span class="fs" style="background:var(--accent-light);color:#92400e">held</span>
+<span class="fa">&rarr;</span>
+<span class="fs" style="background:var(--ok-light);color:#065f46">released</span>
+</div>
+<div class="flow" style="justify-content:center;margin-top:-8px">
+<span style="color:var(--g500);font-size:.85rem">หรือ</span>
+</div>
+<div class="flow" style="justify-content:center;margin-top:-8px">
+<span class="fs">pending</span>
+<span class="fa">&rarr;</span>
+<span class="fs" style="background:var(--accent-light);color:#92400e">held</span>
+<span class="fa">&rarr;</span>
+<span class="fs" style="background:var(--err-light);color:#991b1b">refunded</span>
+</div>
+<p style="text-align:center;font-size:.85rem;color:var(--g500);margin-top:8px"><strong>Refund Policy:</strong> &gt;7 วัน = 100%, 3-7 วัน = 50%, &lt;3 วัน = 0% (ปรับได้ตาม Host)</p>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 7. SYSTEM TABLES                      -->
+<!-- ══════════════════════════════════════ -->
+<section id="s7">
+<div class="sh"><span class="sn">7</span><h2>System Tables</h2></div>
+
+<!-- 7.1 notifications -->
+<div class="schema schema-system">
+<div class="schema-head">
+<span>notifications</span>
+<span class="phase">System</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">user_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>ผู้รับ notification</td></tr>
+<tr><td class="col-name">type</td><td class="col-type">text</td><td>NOT NULL</td><td>join_request / approved / rejected / new_message / review / trip_reminder / expense_added / escrow_update / system</td></tr>
+<tr><td class="col-name">title</td><td class="col-type">text</td><td>NOT NULL</td><td>หัวข้อ</td></tr>
+<tr><td class="col-name">body</td><td class="col-type">text</td><td></td><td>เนื้อหา</td></tr>
+<tr><td class="col-name">trip_id</td><td class="col-type">uuid</td><td><span class="fk">FK → trips</span></td><td>ทริปที่เกี่ยวข้อง (optional)</td></tr>
+<tr><td class="col-name">action_url</td><td class="col-type">text</td><td></td><td>URL ที่ลิงก์ไป เช่น /trips/xxx</td></tr>
+<tr><td class="col-name">is_read</td><td class="col-type">boolean</td><td><span class="default-val">DEFAULT false</span></td><td></td></tr>
+<tr><td class="col-name">read_at</td><td class="col-type">timestamptz</td><td></td><td></td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">Supabase Realtime enabled &bull; Index on (user_id, is_read, created_at DESC)</div>
+</div>
+
+<!-- 7.2 subscriptions -->
+<div class="schema schema-system">
+<div class="schema-head">
+<span>subscriptions</span>
+<span class="phase">System — Premium</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">user_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td></td></tr>
+<tr><td class="col-name">plan</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'premium'</span></td><td>premium (expandable later)</td></tr>
+<tr><td class="col-name">amount</td><td class="col-type">numeric(10,2)</td><td>NOT NULL</td><td>99.00 บาท/เดือน</td></tr>
+<tr><td class="col-name">status</td><td class="col-type">text</td><td><span class="default-val">DEFAULT 'active'</span></td><td>active / expired / cancelled</td></tr>
+<tr><td class="col-name">payment_method</td><td class="col-type">text</td><td></td><td>promptpay / credit_card</td></tr>
+<tr><td class="col-name">payment_reference</td><td class="col-type">text</td><td></td><td>Reference จาก Payment Gateway</td></tr>
+<tr><td class="col-name">started_at</td><td class="col-type">timestamptz</td><td>NOT NULL</td><td>วันเริ่ม</td></tr>
+<tr><td class="col-name">expires_at</td><td class="col-type">timestamptz</td><td>NOT NULL</td><td>วันหมดอายุ</td></tr>
+<tr><td class="col-name">auto_renew</td><td class="col-type">boolean</td><td><span class="default-val">DEFAULT true</span></td><td></td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">CHECK (status IN ('active','expired','cancelled'))</div>
+</div>
+
+<!-- 7.3 blocks -->
+<div class="schema schema-system">
+<div class="schema-head">
+<span>blocks</span>
+<span class="phase">System — Safety</span>
+</div>
+<table>
+<thead><tr><th style="width:22%">Column</th><th style="width:18%">Type</th><th style="width:12%">Constraint</th><th style="width:48%">Description</th></tr></thead>
+<tbody>
+<tr><td class="col-name">id</td><td class="col-type">uuid</td><td><span class="pk">PK</span></td><td>gen_random_uuid()</td></tr>
+<tr><td class="col-name">blocker_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>ผู้บล็อก</td></tr>
+<tr><td class="col-name">blocked_id</td><td class="col-type">uuid</td><td><span class="fk">FK → profiles</span> NOT NULL</td><td>ผู้ถูกบล็อก</td></tr>
+<tr><td class="col-name">created_at</td><td class="col-type">timestamptz</td><td><span class="default-val">DEFAULT now()</span></td><td></td></tr>
+</tbody>
+</table>
+<div class="constraint">UNIQUE (blocker_id, blocked_id) &bull; CHECK (blocker_id != blocked_id)</div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- 8. INDEXES & RLS                      -->
+<!-- ══════════════════════════════════════ -->
+<section id="s8">
+<div class="sh"><span class="sn">8</span><h2>Indexes &amp; RLS Summary</h2></div>
+
+<div class="card card-accent">
+<h3>Key Indexes</h3>
+<table class="summary">
+<thead><tr><th>Table</th><th>Index</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td>trips</td><td>idx_trips_status_start_date (status, start_date)</td><td>Trip Discovery: filter published + sort by date</td></tr>
+<tr><td>trips</td><td>idx_trips_host_id (host_id)</td><td>Host Dashboard: my trips</td></tr>
+<tr><td>trips</td><td>idx_trips_destination_province (destination_province)</td><td>Filter by province</td></tr>
+<tr><td>trips</td><td>idx_trips_destination_country (destination_country)</td><td>Filter by country</td></tr>
+<tr><td>trips</td><td>idx_trips_featured (is_featured, featured_until)</td><td>Featured trips query</td></tr>
+<tr><td>trip_members</td><td>idx_trip_members_trip_status (trip_id, status)</td><td>Member list per trip</td></tr>
+<tr><td>trip_members</td><td>idx_trip_members_user (user_id, status)</td><td>My trips (joined)</td></tr>
+<tr><td>messages</td><td>idx_messages_trip_created (trip_id, created_at DESC)</td><td>Chat history</td></tr>
+<tr><td>reviews</td><td>idx_reviews_reviewee (reviewee_id)</td><td>User's received reviews</td></tr>
+<tr><td>notifications</td><td>idx_notifications_user_unread (user_id, is_read, created_at DESC)</td><td>Unread notifications</td></tr>
+<tr><td>favorites</td><td>idx_favorites_user (user_id)</td><td>User's saved trips</td></tr>
+<tr><td>blocks</td><td>idx_blocks_blocker (blocker_id)</td><td>Block check</td></tr>
+<tr><td>expenses</td><td>idx_expenses_trip (trip_id)</td><td>Trip expenses</td></tr>
+<tr><td>escrow_transactions</td><td>idx_escrow_trip (trip_id)</td><td>Trip payments</td></tr>
+<tr><td>escrow_transactions</td><td>idx_escrow_payer (payer_id, status)</td><td>User's payments</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card card-green" style="margin-top:16px">
+<h3>Row-Level Security (RLS) Policy Guidelines</h3>
+<table class="summary">
+<thead><tr><th>Table</th><th>SELECT</th><th>INSERT</th><th>UPDATE</th><th>DELETE</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>profiles</strong></td>
+<td>ข้อมูลสาธารณะ (display_name, trust_score, badges): ทุกคน<br>ข้อมูลส่วนตัว (phone, full_name): owner only + ตาม trip_member_privacy</td>
+<td>owner only (via trigger after auth.users insert)</td>
+<td>owner only</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>trips</strong></td>
+<td>published/full/in_progress/completed: ทุกคน<br>draft: host only</td>
+<td>authenticated</td>
+<td>host only</td>
+<td>host only (soft delete via status='cancelled')</td>
+</tr>
+<tr>
+<td><strong>trip_members</strong></td>
+<td>trip members + host</td>
+<td>authenticated (join request)</td>
+<td>host (approve/reject) + member (cancel/leave)</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>messages</strong></td>
+<td>approved trip members only</td>
+<td>approved trip members only</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>reviews</strong></td>
+<td>is_visible = true: ทุกคน<br>own review: owner</td>
+<td>approved trip members (after trip completed)</td>
+<td>reviewer (before counterpart reviewed)</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>notifications</strong></td>
+<td>owner only</td>
+<td>system (via function/trigger)</td>
+<td>owner only (mark as read)</td>
+<td>owner only</td>
+</tr>
+<tr>
+<td><strong>blocks</strong></td>
+<td>blocker only</td>
+<td>authenticated</td>
+<td>-</td>
+<td>blocker only</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="card" style="margin-top:16px">
+<h3>Trust Score Calculation Formula</h3>
+<div class="co blue">
+<strong>trust_score = W1(verification) + W2(trips) + W3(rating) + W4(cancel_penalty)</strong>
+<ul class="bl" style="margin-top:8px">
+<li><strong>W1 — Verification (0-30):</strong> Level 0=0, Level 1=10, Level 2=20, Level 3=30</li>
+<li><strong>W2 — Trip Experience (0-30):</strong> min(total_trips_joined + total_trips_hosted * 2, 30)</li>
+<li><strong>W3 — Average Rating (0-30):</strong> (average_rating / 5) * 30</li>
+<li><strong>W4 — Cancel Penalty (0 to -20):</strong> -(cancellation_count / total_trips * 20)</li>
+</ul>
+<p style="margin-top:8px;font-size:.85rem;color:var(--g500)">* Recalculated via DB function after each trip completion / review / verification</p>
+</div>
+</div>
+
+<div class="card" style="margin-top:16px">
+<h3>Supabase Storage Buckets</h3>
+<table class="summary">
+<thead><tr><th>Bucket</th><th>Access</th><th>Content</th><th>Max Size</th></tr></thead>
+<tbody>
+<tr><td><strong>avatars</strong></td><td>Public read, Owner write</td><td>Profile photos</td><td>2 MB</td></tr>
+<tr><td><strong>trip-images</strong></td><td>Public read, Host write</td><td>Trip cover + gallery images</td><td>5 MB</td></tr>
+<tr><td><strong>chat-images</strong></td><td>Trip members read/write</td><td>Chat photos</td><td>5 MB</td></tr>
+<tr><td><strong>receipts</strong></td><td>Trip members read, Payer write</td><td>Expense receipts</td><td>5 MB</td></tr>
+<tr><td><strong>verifications</strong></td><td>Owner + Admin only</td><td>KYC documents (encrypted)</td><td>10 MB</td></tr>
+<tr><td><strong>evidence</strong></td><td>Reporter + Admin only</td><td>Report evidence screenshots</td><td>5 MB</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card" style="margin-top:16px">
+<h3>Database Functions &amp; Triggers</h3>
+<table class="summary">
+<thead><tr><th>Function/Trigger</th><th>When</th><th>Action</th></tr></thead>
+<tbody>
+<tr><td><strong>handle_new_user()</strong></td><td>AFTER INSERT on auth.users</td><td>Create profiles row with defaults</td></tr>
+<tr><td><strong>update_member_count()</strong></td><td>AFTER INSERT/UPDATE on trip_members</td><td>Recalculate trips.member_count, update status to 'full' if needed</td></tr>
+<tr><td><strong>update_trust_score()</strong></td><td>AFTER INSERT on reviews, verifications</td><td>Recalculate profiles.trust_score</td></tr>
+<tr><td><strong>update_average_rating()</strong></td><td>AFTER INSERT on reviews</td><td>Recalculate profiles.average_rating</td></tr>
+<tr><td><strong>make_reviews_visible()</strong></td><td>AFTER INSERT on reviews</td><td>Check if both parties reviewed → set is_visible=true</td></tr>
+<tr><td><strong>create_privacy_defaults()</strong></td><td>AFTER UPDATE on trip_members (approved)</td><td>Create trip_member_privacy with defaults</td></tr>
+<tr><td><strong>send_notification()</strong></td><td>Various triggers</td><td>Insert into notifications + Realtime broadcast</td></tr>
+<tr><td><strong>update_updated_at()</strong></td><td>BEFORE UPDATE on profiles, trips, etc.</td><td>Set updated_at = now()</td></tr>
+<tr><td><strong>check_premium_status()</strong></td><td>Scheduled (cron daily)</td><td>Expire subscriptions, update profiles.is_premium</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+<p style="margin-bottom:4px"><strong>Travel Buddy</strong> — Database Schema Document v1.0</p>
+<p style="margin-bottom:4px">Designed by Surat Sritomya &bull; July 2026 &bull; Based on PRD v0.1 + BRD v1.0</p>
+<p>&copy; 2026 Travel Buddy. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
