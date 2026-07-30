@@ -3,13 +3,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Zap, MapPin, Users, Star } from 'lucide-react'
 import { getHomeStats } from '@/features/stations/actions/queries'
-import { getVehicleModels } from '@/features/motorcycle/actions/queries'
+import { getVehicleModels, getPopularModelIds } from '@/features/motorcycle/actions/queries'
 import { HeroMotorcycleSelector } from '@/features/motorcycle/components/hero-motorcycle-selector'
 
 export default async function HomePage() {
-  const [stats, vehicleModels] = await Promise.all([
+  const [stats, vehicleModels, popularModelIds] = await Promise.all([
     getHomeStats(),
     getVehicleModels(),
+    getPopularModelIds(),
   ])
 
   return (
@@ -26,7 +27,7 @@ export default async function HomePage() {
           ค้นหาจุดชาร์จมอเตอร์ไซค์ไฟฟ้าทั่วประเทศไทย
           แชร์ประสบการณ์และรีวิวสถานีชาร์จ โดยชุมชนผู้ใช้ EV
         </p>
-        <HeroMotorcycleSelector models={vehicleModels} />
+        <HeroMotorcycleSelector models={vehicleModels} popularModelIds={popularModelIds} />
         <div className="flex gap-3">
           <Button size="lg" nativeButton={false} render={<Link href="/map" />}>
             ดูแผนที่
