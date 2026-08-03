@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { ITEMS_PER_PAGE } from '@/lib/constants'
-import type { ConnectorType, Amenity, ChargingLocation } from '@/types/entities'
+import type { ConnectorType, Amenity, ChargingLocation, Network } from '@/types/entities'
 import type { StationMapPin } from '@/types/map'
 import type { VerificationLevel } from '@/features/compatibility/types'
 
@@ -323,4 +323,33 @@ export async function getCompatibleLocationIds(
   if (!data) return []
   const ids = (data as { location_id: string }[]).map((d) => d.location_id)
   return [...new Set(ids)]
+}
+
+// --- Networks ---
+
+export async function getNetworks(): Promise<Network[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('networks')
+    .select('*')
+    .order('display_name')
+  return (data ?? []) as Network[]
+}
+
+// --- Location → Connector type mapping (for map filtering) ---
+
+export async function getLocationConnectorMap(): Promise<
+  Record<string, string[]>
+> {
+  const supabase = await createClient()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (supabase.from('location_connectors') as any)
+    .select('location_id, connector_type_id')
+
+  const map: Record<string, string[]> = {}
+  for (const row of (data ?? []) as { location_id: string; connector_type_id: string }[]) {
+    if (!map[row.location_id]) map[row.location_id] = []
+    map[row.location_id].push(row.connector_type_id)
+  }
+  return map
 }

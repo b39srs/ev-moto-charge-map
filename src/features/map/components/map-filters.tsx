@@ -11,20 +11,35 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { THAI_PROVINCES } from '@/lib/constants'
+import type { ConnectorType, Network } from '@/types/entities'
 
 interface MapFiltersProps {
   isFreeOnly: boolean
   province: string
+  connectorTypeId: string
+  networkId: string
+  connectorTypes: ConnectorType[]
+  networks: Network[]
+  hasVehicleFilter: boolean
   onFreeOnlyChange: (value: boolean) => void
   onProvinceChange: (value: string) => void
+  onConnectorTypeChange: (value: string) => void
+  onNetworkChange: (value: string) => void
   activeFilterCount: number
 }
 
 export function MapFilters({
   isFreeOnly,
   province,
+  connectorTypeId,
+  networkId,
+  connectorTypes,
+  networks,
+  hasVehicleFilter,
   onFreeOnlyChange,
   onProvinceChange,
+  onConnectorTypeChange,
+  onNetworkChange,
   activeFilterCount,
 }: MapFiltersProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -58,6 +73,80 @@ export function MapFilters({
             </button>
           </div>
 
+          {/* Network / Brand filter */}
+          <div className="mb-3">
+            <label className="mb-1 block text-xs text-muted-foreground">
+              เครือข่าย
+            </label>
+            <Select
+              value={networkId || 'all'}
+              onValueChange={(v) => onNetworkChange(v === 'all' ? '' : (v ?? ''))}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="เครือข่าย" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">ทุกเครือข่าย</SelectItem>
+                {networks.map((n) => (
+                  <SelectItem key={n.id} value={n.id}>
+                    {n.display_name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Connector type filter (hidden when vehicle filter is active) */}
+          {!hasVehicleFilter && (
+            <div className="mb-3">
+              <label className="mb-1 block text-xs text-muted-foreground">
+                หัวชาร์จ
+              </label>
+              <Select
+                value={connectorTypeId || 'all'}
+                onValueChange={(v) =>
+                  onConnectorTypeChange(v === 'all' ? '' : (v ?? ''))
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="หัวชาร์จ" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">ทุกประเภท</SelectItem>
+                  {connectorTypes.map((ct) => (
+                    <SelectItem key={ct.id} value={ct.id}>
+                      {ct.display_name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {/* Province filter */}
+          <div className="mb-3">
+            <label className="mb-1 block text-xs text-muted-foreground">
+              จังหวัด
+            </label>
+            <Select
+              value={province || 'all'}
+              onValueChange={(v) => onProvinceChange(v === 'all' ? '' : (v ?? ''))}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="จังหวัด" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">ทุกจังหวัด</SelectItem>
+                {THAI_PROVINCES.map((p) => (
+                  <SelectItem key={p} value={p}>
+                    {p}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Free only */}
           <label className="mb-3 flex items-center gap-2">
             <Checkbox
               checked={isFreeOnly}
@@ -66,23 +155,6 @@ export function MapFilters({
             <span className="text-sm">ฟรีเท่านั้น</span>
           </label>
 
-          <Select
-            value={province || 'all'}
-            onValueChange={(v) => onProvinceChange(v === 'all' ? '' : (v ?? ''))}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="จังหวัด" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">ทุกจังหวัด</SelectItem>
-              {THAI_PROVINCES.map((p) => (
-                <SelectItem key={p} value={p}>
-                  {p}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
           {activeFilterCount > 0 && (
             <button
               type="button"
@@ -90,6 +162,8 @@ export function MapFilters({
               onClick={() => {
                 onFreeOnlyChange(false)
                 onProvinceChange('')
+                onConnectorTypeChange('')
+                onNetworkChange('')
               }}
             >
               ล้างตัวกรองทั้งหมด

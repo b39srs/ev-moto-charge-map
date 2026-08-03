@@ -10,15 +10,22 @@ import { ClusteredMarkers } from './clustered-markers'
 import { Bike, X } from 'lucide-react'
 import Link from 'next/link'
 import type { StationMapPin } from '@/types/map'
+import type { ConnectorType, Network } from '@/types/entities'
 
 interface FullMapProps {
   stations: StationMapPin[]
+  connectorTypes: ConnectorType[]
+  networks: Network[]
+  locationConnectorMap: Record<string, string[]>
   compatibleLocationIds?: string[]
   vehicleDisplayName?: string
 }
 
 export function FullMap({
   stations,
+  connectorTypes,
+  networks,
+  locationConnectorMap,
   compatibleLocationIds,
   vehicleDisplayName,
 }: FullMapProps) {
@@ -26,6 +33,8 @@ export function FullMap({
   const [search, setSearch] = useState('')
   const [isFreeOnly, setIsFreeOnly] = useState(false)
   const [province, setProvince] = useState('')
+  const [connectorTypeId, setConnectorTypeId] = useState('')
+  const [networkId, setNetworkId] = useState('')
 
   // Geolocation state
   const [userPosition, setUserPosition] = useState<{
@@ -54,11 +63,22 @@ export function FullMap({
       if (province && s.province !== province) {
         return false
       }
+      if (connectorTypeId && !locationConnectorMap[s.id]?.includes(connectorTypeId)) {
+        return false
+      }
+      if (networkId && s.network_id !== networkId) {
+        return false
+      }
       return true
     })
-  }, [stations, search, isFreeOnly, province, compatibleIdSet])
+  }, [stations, search, isFreeOnly, province, compatibleIdSet, connectorTypeId, networkId, locationConnectorMap])
 
-  const activeFilterCount = (isFreeOnly ? 1 : 0) + (province ? 1 : 0)
+  const hasVehicleFilter = !!compatibleLocationIds
+  const activeFilterCount =
+    (isFreeOnly ? 1 : 0) +
+    (province ? 1 : 0) +
+    (connectorTypeId ? 1 : 0) +
+    (networkId ? 1 : 0)
 
   const handleSearchChange = useCallback((value: string) => {
     setSearch(value)
@@ -104,8 +124,15 @@ export function FullMap({
           <MapFilters
             isFreeOnly={isFreeOnly}
             province={province}
+            connectorTypeId={connectorTypeId}
+            networkId={networkId}
+            connectorTypes={connectorTypes}
+            networks={networks}
+            hasVehicleFilter={hasVehicleFilter}
             onFreeOnlyChange={setIsFreeOnly}
             onProvinceChange={setProvince}
+            onConnectorTypeChange={setConnectorTypeId}
+            onNetworkChange={setNetworkId}
             activeFilterCount={activeFilterCount}
           />
         </div>

@@ -13,6 +13,8 @@ export type ChargingLocation = Tables['charging_locations']['Row']
 export type ChargingLocationInsert = Tables['charging_locations']['Insert']
 export type ChargingLocationUpdate = Tables['charging_locations']['Update']
 
+export type Network = Tables['networks']['Row']
+
 export type ConnectorType = Tables['connector_types']['Row']
 
 export type LocationConnector = Tables['location_connectors']['Row']

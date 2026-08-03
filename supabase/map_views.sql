@@ -8,6 +8,7 @@ SELECT
   province,
   avg_rating,
   review_count,
+  network_id,
   ST_Y(location::geometry) AS latitude,
   ST_X(location::geometry) AS longitude
 FROM public.charging_locations;

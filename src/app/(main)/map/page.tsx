@@ -4,6 +4,9 @@ import { FullMap } from '@/features/map/components/full-map'
 import {
   getStationsForMap,
   getCompatibleLocationIds,
+  getConnectorTypes,
+  getNetworks,
+  getLocationConnectorMap,
 } from '@/features/stations/actions/queries'
 import { getVehicleModelById } from '@/features/motorcycle/actions/queries'
 import { getModelDisplayName } from '@/features/motorcycle/lib/utils'
@@ -20,7 +23,14 @@ export default async function MapPage({
   searchParams: Promise<{ vehicle?: string }>
 }) {
   const { vehicle: vehicleId } = await searchParams
-  const stations = await getStationsForMap()
+
+  const [stations, connectorTypes, networks, locationConnectorMap] =
+    await Promise.all([
+      getStationsForMap(),
+      getConnectorTypes(),
+      getNetworks(),
+      getLocationConnectorMap(),
+    ])
 
   let compatibleLocationIds: string[] | undefined
   let vehicleDisplayName: string | undefined
@@ -40,6 +50,9 @@ export default async function MapPage({
       <GoogleMapsProvider>
         <FullMap
           stations={stations}
+          connectorTypes={connectorTypes}
+          networks={networks}
+          locationConnectorMap={locationConnectorMap}
           compatibleLocationIds={compatibleLocationIds}
           vehicleDisplayName={vehicleDisplayName}
         />

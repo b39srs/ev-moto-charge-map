@@ -115,6 +115,7 @@ export type Database = {
           avg_rating: number
           review_count: number
           photo_count: number
+          network_id: string | null
           created_at: string
           updated_at: string
         }
@@ -141,6 +142,7 @@ export type Database = {
           avg_rating?: number
           review_count?: number
           photo_count?: number
+          network_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -165,7 +167,27 @@ export type Database = {
           avg_rating?: number
           review_count?: number
           photo_count?: number
+          network_id?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      networks: {
+        Row: {
+          id: string
+          name: string
+          display_name: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          display_name: string
+          created_at?: string
+        }
+        Update: {
+          name?: string
+          display_name?: string
         }
         Relationships: []
       }
