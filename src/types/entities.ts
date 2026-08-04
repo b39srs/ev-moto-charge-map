@@ -43,6 +43,8 @@ export type VerificationLog = Tables['verification_logs']['Row']
 export type EditSuggestion = Tables['edit_suggestions']['Row']
 export type EditSuggestionInsert = Tables['edit_suggestions']['Insert']
 
+export type StationEditHistory = Tables['station_edit_history']['Row']
+
 // Extended types with joins
 export type ChargingLocationWithDetails = ChargingLocation & {
   location_connectors: (LocationConnector & {

@@ -8,6 +8,7 @@ import {
   getStationById,
   checkFavorite,
   getStationCoordinates,
+  getStationEditHistory,
 } from '@/features/stations/actions/queries'
 import { getReviewsByLocation } from '@/features/reviews/actions/queries'
 import { getCompatibilitySummaryByLocation } from '@/features/compatibility/actions/queries'
@@ -44,6 +45,7 @@ import { PhotoGallery } from '@/features/stations/components/photo-gallery'
 import { FavoriteButton } from '@/features/stations/components/favorite-button'
 import { ReviewsSection } from '@/features/reviews/components/reviews-section'
 import { StationLocationCard } from '@/features/map/components/station-location-card'
+import { EditHistory } from '@/features/stations/components/edit-history'
 
 export default async function StationDetailPage({
   params,
@@ -69,6 +71,7 @@ export default async function StationDetailPage({
     compatSummaries,
     userMotorcycle,
     vehicleModels,
+    editHistory,
   ] = await Promise.all([
     getReviewsByLocation(id),
     user ? checkFavorite(user.id, id) : false,
@@ -76,6 +79,7 @@ export default async function StationDetailPage({
     getCompatibilitySummaryByLocation(id),
     user ? getUserMotorcycle(user.id) : null,
     getVehicleModels(),
+    getStationEditHistory(id),
   ])
 
   const hasReviewed = user
@@ -91,8 +95,7 @@ export default async function StationDetailPage({
           <div className="flex items-start justify-between gap-3">
             <StationHeader station={station} />
             <div className="flex items-center gap-2">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {user && user.id === (station as any).added_by && (
+              {user && (
                 <Button variant="outline" size="sm" nativeButton={false} render={<Link href={`/stations/${id}/edit`} />}>
                   <Pencil className="mr-1.5 h-3.5 w-3.5" />
                   แก้ไข
@@ -116,6 +119,8 @@ export default async function StationDetailPage({
             userMotorcycleId={userMotorcycle?.id}
             vehicleModels={vehicleModels}
           />
+
+          <EditHistory history={editHistory} />
 
           <ReviewsSection
             locationId={id}

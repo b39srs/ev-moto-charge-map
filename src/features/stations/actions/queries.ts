@@ -190,7 +190,7 @@ export async function getFavoriteStations(userId: string) {
   return (data ?? []) as any[]
 }
 
-export async function getStationForEdit(stationId: string, userId: string) {
+export async function getStationForEdit(stationId: string) {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('charging_locations')
@@ -201,7 +201,6 @@ export async function getStationForEdit(stationId: string, userId: string) {
       photos(id, url, storage_path, caption, is_primary)
     `)
     .eq('id', stationId)
-    .eq('added_by', userId)
     .single()
 
   if (error || !data) return null
@@ -323,6 +322,39 @@ export async function getCompatibleLocationIds(
   if (!data) return []
   const ids = (data as { location_id: string }[]).map((d) => d.location_id)
   return [...new Set(ids)]
+}
+
+// --- Edit History ---
+
+export interface EditHistoryItem {
+  id: string
+  editor_name: string | null
+  editor_avatar: string | null
+  changes: Record<string, { old: string | null; new: string | null }>
+  created_at: string
+}
+
+export async function getStationEditHistory(
+  locationId: string
+): Promise<EditHistoryItem[]> {
+  const supabase = await createClient()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase.from('station_edit_history') as any)
+    .select('id, changes, created_at, profiles!station_edit_history_editor_id_fkey(full_name, avatar_url)')
+    .eq('location_id', locationId)
+    .order('created_at', { ascending: false })
+    .limit(20)
+
+  if (error || !data) return []
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (data as any[]).map((row) => ({
+    id: row.id,
+    editor_name: row.profiles?.full_name ?? null,
+    editor_avatar: row.profiles?.avatar_url ?? null,
+    changes: row.changes,
+    created_at: row.created_at,
+  }))
 }
 
 // --- Networks ---

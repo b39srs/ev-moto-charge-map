@@ -134,15 +134,15 @@ export async function updateStation(
   const stationId = formData.get('station_id') as string
   if (!stationId) return { success: false, message: 'ไม่พบสถานี' }
 
-  // Verify ownership
+  // Fetch current data for edit history
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: existing } = await (supabase.from('charging_locations') as any)
-    .select('added_by')
+    .select('name, address, province, district, subdistrict, postal_code, description, operating_hours, contact_phone, website_url, is_free, price_description')
     .eq('id', stationId)
     .single()
 
-  if (!existing || existing.added_by !== user.id) {
-    return { success: false, message: 'คุณไม่มีสิทธิ์แก้ไขสถานีนี้' }
+  if (!existing) {
+    return { success: false, message: 'ไม่พบสถานี' }
   }
 
   const raw = {
@@ -178,6 +178,29 @@ export async function updateStation(
 
   const v = parsed.data
 
+  // Build changes object for edit history
+  const newValues: Record<string, string | null> = {
+    name: v.name,
+    address: v.address,
+    province: v.province,
+    district: v.district ?? null,
+    subdistrict: v.subdistrict ?? null,
+    postal_code: v.postal_code ?? null,
+    description: v.description ?? null,
+    operating_hours: v.operating_hours ?? null,
+    contact_phone: v.contact_phone ?? null,
+    website_url: v.website_url ?? null,
+    is_free: String(v.is_free),
+    price_description: v.price_description ?? null,
+  }
+  const changes: Record<string, { old: string | null; new: string | null }> = {}
+  for (const [key, newVal] of Object.entries(newValues)) {
+    const oldVal = existing[key] != null ? String(existing[key]) : null
+    if (oldVal !== newVal) {
+      changes[key] = { old: oldVal, new: newVal }
+    }
+  }
+
   // Update charging location
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error: updateError } = await (supabase.from('charging_locations') as any)
@@ -195,12 +218,24 @@ export async function updateStation(
       is_free: v.is_free,
       price_description: v.price_description ?? null,
       location: `SRID=4326;POINT(${v.longitude} ${v.latitude})` as unknown as string,
+      last_edited_by: user.id,
+      last_edited_at: new Date().toISOString(),
     })
     .eq('id', stationId)
 
   if (updateError) {
     console.error('Error updating station:', updateError)
     return { success: false, message: 'เกิดข้อผิดพลาดในการอัปเดตสถานี' }
+  }
+
+  // Record edit history (only if something changed)
+  if (Object.keys(changes).length > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.from('station_edit_history') as any).insert({
+      location_id: stationId,
+      editor_id: user.id,
+      changes,
+    })
   }
 
   // Replace connectors

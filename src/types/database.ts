@@ -118,6 +118,8 @@ export type Database = {
           review_count: number
           photo_count: number
           network_id: string | null
+          last_edited_by: string | null
+          last_edited_at: string | null
           created_at: string
           updated_at: string
         }
@@ -145,6 +147,8 @@ export type Database = {
           review_count?: number
           photo_count?: number
           network_id?: string | null
+          last_edited_by?: string | null
+          last_edited_at?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -170,6 +174,8 @@ export type Database = {
           review_count?: number
           photo_count?: number
           network_id?: string | null
+          last_edited_by?: string | null
+          last_edited_at?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -533,6 +539,26 @@ export type Database = {
           status?: Database['public']['Enums']['suggestion_status']
           reviewed_by?: string | null
           reviewed_at?: string | null
+        }
+        Relationships: []
+      }
+      station_edit_history: {
+        Row: {
+          id: string
+          location_id: string
+          editor_id: string
+          changes: Record<string, { old: string | null; new: string | null }>
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          location_id: string
+          editor_id: string
+          changes: Record<string, { old: string | null; new: string | null }>
+          created_at?: string
+        }
+        Update: {
+          changes?: Record<string, { old: string | null; new: string | null }>
         }
         Relationships: []
       }

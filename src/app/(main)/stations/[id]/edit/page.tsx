@@ -30,7 +30,7 @@ export default async function EditStationPage({
   }
 
   const [station, coordinates, connectorTypes, amenities] = await Promise.all([
-    getStationForEdit(id, user.id),
+    getStationForEdit(id),
     getStationCoordinates(id),
     getConnectorTypes(),
     getAmenities(),
