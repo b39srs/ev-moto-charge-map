@@ -67,6 +67,7 @@ export async function suggestVehicleModel(
       brand: parsed.data.brand,
       model: parsed.data.model,
       added_by: user.id,
+      is_active: false,
     })
     .select('id')
     .single()
@@ -93,10 +94,9 @@ export async function suggestVehicleModel(
     return { success: false, message: 'เกิดข้อผิดพลาด กรุณาลองใหม่' }
   }
 
-  revalidatePath('/', 'layout')
   return {
     success: true,
-    message: 'เพิ่มรุ่นรถสำเร็จ',
+    message: 'ส่งคำขอเพิ่มรุ่นรถแล้ว รอแอดมินอนุมัติ',
     modelId: data.id,
   }
 }

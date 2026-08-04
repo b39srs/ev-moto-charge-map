@@ -56,6 +56,7 @@ export type Database = {
           range_km: number | null
           image_url: string | null
           is_active: boolean
+          added_by: string | null
           created_at: string
           updated_at: string
         }
@@ -72,6 +73,7 @@ export type Database = {
           range_km?: number | null
           image_url?: string | null
           is_active?: boolean
+          added_by?: string | null
           created_at?: string
           updated_at?: string
         }

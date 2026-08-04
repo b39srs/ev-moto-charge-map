@@ -18,13 +18,17 @@ export async function Header() {
   } = await supabase.auth.getUser()
 
   let profile: { full_name: string | null; avatar_url: string | null; email: string | null } | null = null
+  let isAdmin = false
   if (user) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await (supabase.from('profiles') as any)
-      .select('full_name, avatar_url, email')
+      .select('full_name, avatar_url, email, role')
       .eq('id', user.id)
       .single()
-    profile = data as typeof profile
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const row = data as any
+    profile = row
+    isAdmin = row?.role === 'admin' || row?.role === 'moderator'
   }
 
   return (
@@ -47,6 +51,14 @@ export async function Header() {
         </div>
 
         <div className="flex items-center gap-2">
+          {isAdmin && (
+            <Link
+              href="/admin/vehicles"
+              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            >
+              Admin
+            </Link>
+          )}
           {profile ? (
             <UserMenu user={profile} />
           ) : (
